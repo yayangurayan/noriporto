@@ -42,6 +42,14 @@ body {
   scroll-behavior: smooth;
 }
 
+/* ===== PRELOADER STYLES (BARU) ===== */
+#preloader.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+/* ===== END OF PRELOADER STYLES ===== */
+
+
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
@@ -1027,6 +1035,35 @@ a:hover {
 
 .animate-slideInUp {
   animation: slideInUp 0.6s ease forwards;
+}
+
+/* ===== SCROLL-TRIGGERED ANIMATIONS (BARU) ===== */
+.fade-in-section {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in-section.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ===== ENTRY ANIMATION STYLES (BARU) ===== */
+.reveal-on-load {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.reveal-on-load.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Menambahkan delay untuk elemen kedua di hero section */
+.reveal-on-load:nth-child(2) {
+    transition-delay: 0.2s;
 }
 
 /* Scrollbar Styling */

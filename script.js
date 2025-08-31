@@ -12,11 +12,13 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 function initApp() {
     // Initialize all components
+    initPreloader();
     initMobileMenu();
     initScrollAnimations();
     initCartSystem();
     initSmoothScrolling();
     initModalSystem();
+    initNotificationModal();
     initFormValidation();
     initLoadingState();
     
@@ -30,7 +32,74 @@ function initApp() {
 }
 
 /**
- * Mobile Menu Functionality (Updated for Side Panel)
+ * Preloader and Entry Animation Functionality
+ */
+function initPreloader() {
+    const preloader = document.getElementById('preloader');
+    const contentWrapper = document.getElementById('content-wrapper');
+    const revealElements = document.querySelectorAll('.reveal-on-load');
+
+    if (!preloader || !contentWrapper) return;
+
+    // Hide preloader after 1.5 seconds
+    setTimeout(() => {
+        // Start fade-out transition for preloader
+        preloader.classList.add('opacity-0');
+        
+        // Add event listener to detect end of transition
+        preloader.addEventListener('transitionend', (e) => {
+            // Ensure the event is from the preloader itself
+            if (e.target === preloader) {
+                // Hide preloader completely
+                preloader.style.display = 'none';
+                
+                // Show main content with a fade-in effect
+                contentWrapper.classList.remove('opacity-0');
+
+                // Trigger entry animation for hero section elements
+                revealElements.forEach(el => {
+                    el.classList.add('revealed');
+                });
+            }
+        }, { once: true }); // 'once' option auto-removes the listener after execution
+
+    }, 1500); // 1.5 second duration as requested
+}
+
+
+/**
+ * Notification Modal Functionality
+ */
+function initNotificationModal() {
+    const notificationButton = document.getElementById('notification-button');
+    const notificationModal = document.getElementById('notification-modal');
+    const closeNotificationButton = document.getElementById('close-notification-button');
+    const notificationDot = document.getElementById('notification-dot');
+
+    if (!notificationButton || !notificationModal || !closeNotificationButton || !notificationDot) return;
+
+    // Function to open the notification modal
+    notificationButton.addEventListener('click', () => {
+        openModal(notificationModal);
+        // Hide the red dot when notifications are opened (marks as read)
+        notificationDot.classList.add('hidden');
+    });
+
+    // Function to close the modal with the 'X' button
+    closeNotificationButton.addEventListener('click', () => {
+        closeModal(notificationModal);
+    });
+
+    // Function to close the modal by clicking outside the content area
+    notificationModal.addEventListener('click', (e) => {
+        if (e.target === notificationModal) {
+            closeModal(notificationModal);
+        }
+    });
+}
+
+/**
+ * Mobile Menu Functionality
  */
 function initMobileMenu() {
     const mobileMenuButton = document.getElementById('mobile-menu-button');
@@ -38,28 +107,24 @@ function initMobileMenu() {
     const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
     const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
 
-    // Guard clause to ensure elements exist
     if (!mobileMenuButton || !mobileMenu || !mobileMenuOverlay) return;
 
     function toggleMobileMenu() {
-        mobileMenu.classList.toggle('translate-x-full'); // Slides menu in/out from the right
-        mobileMenuOverlay.classList.toggle('hidden'); // Shows/hides the dark overlay
+        mobileMenu.classList.toggle('translate-x-full');
+        mobileMenuOverlay.classList.toggle('hidden');
         
-        // Animate overlay opacity for a fade-in/out effect
         setTimeout(() => {
             mobileMenuOverlay.classList.toggle('opacity-0');
         }, 10);
         
-        mobileMenuButton.classList.toggle('hamburger-active'); // Animates the hamburger icon to an 'X'
+        mobileMenuButton.classList.toggle('hamburger-active');
     }
 
     mobileMenuButton.addEventListener('click', toggleMobileMenu);
-    mobileMenuOverlay.addEventListener('click', toggleMobileMenu); // Close menu when clicking on the overlay
+    mobileMenuOverlay.addEventListener('click', toggleMobileMenu);
 
-    // Close mobile menu when a navigation link is clicked
     mobileNavLinks.forEach(link => {
         link.addEventListener('click', () => {
-            // Check if the menu is currently open before trying to close it
             if (!mobileMenu.classList.contains('translate-x-full')) {
                 toggleMobileMenu();
             }
@@ -75,12 +140,10 @@ function initScrollAnimations() {
     const fadeSections = document.querySelectorAll('.fade-in-section');
     
     if (fadeSections.length > 0) {
-        // Create Intersection Observer for scroll animations
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-visible');
-                    // Stop observing after animation
                     observer.unobserve(entry.target);
                 }
             });
@@ -89,13 +152,11 @@ function initScrollAnimations() {
             rootMargin: '0px 0px -50px 0px'
         });
         
-        // Observe all fade sections
         fadeSections.forEach(section => {
             observer.observe(section);
         });
     }
     
-    // Header scroll effect
     const header = document.getElementById('header');
     if (header) {
         window.addEventListener('scroll', function() {
@@ -163,21 +224,18 @@ function initCartSystem() {
     const closeCartButton = document.getElementById('close-cart-button');
     const checkoutButton = document.getElementById('checkout-button');
     
-    // Open cart modal
     if (cartButton && cartModal) {
         cartButton.addEventListener('click', function() {
             openModal(cartModal);
         });
     }
     
-    // Close cart modal
     if (closeCartButton) {
         closeCartButton.addEventListener('click', function() {
             closeModal(cartModal);
         });
     }
     
-    // Close modal when clicking outside
     if (cartModal) {
         cartModal.addEventListener('click', function(e) {
             if (e.target === cartModal) {
@@ -186,24 +244,18 @@ function initCartSystem() {
         });
     }
     
-    // Checkout functionality
     if (checkoutButton) {
         checkoutButton.addEventListener('click', function() {
             processCheckout();
         });
     }
     
-    // Initialize cart from localStorage if available
     const savedCart = localStorage.getItem('noriCart');
     if (savedCart) {
         cart = JSON.parse(savedCart);
     }
 }
 
-/**
- * Add product to cart
- * @param {number} productId - ID of the product to add
- */
 function addToCart(productId) {
     if (!products[productId]) {
         console.error('Product not found:', productId);
@@ -211,49 +263,41 @@ function addToCart(productId) {
         return;
     }
     
-    // Get product customizations based on type
     let customizations = {};
     
     if (productId === 1) {
-        // Source Code Template
         const templateSelect = document.getElementById('template-choice');
         if (templateSelect) {
             customizations.Template = templateSelect.value;
         }
     } else if (productId === 2) {
-        // Web Portfolio Complete
         const temaRadios = document.querySelectorAll('input[name="tema"]');
         const warnaSelect = document.getElementById('warna-choice');
         const modeRadios = document.querySelectorAll('input[name="mode"]');
         const featureCheckboxes = document.querySelectorAll('.custom-feature:checked');
         
-        // Get selected tema
         temaRadios.forEach(radio => {
             if (radio.checked) {
                 customizations.Tema = radio.value;
             }
         });
         
-        // Get selected warna
         if (warnaSelect) {
             customizations.Warna = warnaSelect.value;
         }
         
-        // Get selected mode
         modeRadios.forEach(radio => {
             if (radio.checked) {
                 customizations.Mode = radio.value;
             }
         });
         
-        // Get selected features
         const features = Array.from(featureCheckboxes).map(cb => cb.value);
         if (features.length > 0) {
             customizations.Fitur = features.join(', ');
         }
     }
     
-    // Add product to cart
     cart.push({
         id: productId,
         name: products[productId].name,
@@ -262,20 +306,11 @@ function addToCart(productId) {
         customizations: customizations
     });
     
-    // Save to localStorage
     saveCartToStorage();
-    
-    // Update UI
     updateCartUI();
-    
-    // Show success message
     showToast('Produk berhasil ditambahkan ke keranjang', 'success');
 }
 
-/**
- * Remove item from cart
- * @param {number} index - Index of the item to remove
- */
 function removeFromCart(index) {
     if (index >= 0 && index < cart.length) {
         cart.splice(index, 1);
@@ -285,16 +320,10 @@ function removeFromCart(index) {
     }
 }
 
-/**
- * Update item quantity in cart
- * @param {number} index - Index of the item to update
- * @param {number} change - Change in quantity (positive or negative)
- */
 function updateQuantity(index, change) {
     if (index >= 0 && index < cart.length) {
         cart[index].quantity += change;
         
-        // Ensure quantity is at least 1
         if (cart[index].quantity < 1) {
             cart[index].quantity = 1;
         }
@@ -304,11 +333,6 @@ function updateQuantity(index, change) {
     }
 }
 
-/**
- * Set item quantity in cart
- * @param {number} index - Index of the item to update
- * @param {number} value - New quantity value
- */
 function setQuantity(index, value) {
     const quantity = parseInt(value, 10);
     
@@ -319,9 +343,6 @@ function setQuantity(index, value) {
     }
 }
 
-/**
- * Update cart UI
- */
 function updateCartUI() {
     const cartContainer = document.getElementById('cart-items-container');
     const cartTotalEl = document.getElementById('cart-total');
@@ -333,42 +354,32 @@ function updateCartUI() {
     
     if (!cartContainer) return;
     
-    // Clear current items
     cartContainer.innerHTML = '';
     
     if (cart.length === 0) {
-        // Show empty cart message
         if (emptyCartMsg) {
             emptyCartMsg.classList.remove('hidden');
             cartContainer.appendChild(emptyCartMsg);
         }
-        
-        // Hide customer form and disable checkout
         if (customerForm) customerForm.classList.add('hidden');
         if (checkoutButton) checkoutButton.disabled = true;
     } else {
-        // Hide empty cart message
         if (emptyCartMsg) emptyCartMsg.classList.add('hidden');
-        
-        // Show customer form and enable checkout
         if (customerForm) customerForm.classList.remove('hidden');
         if (checkoutButton) checkoutButton.disabled = false;
         
-        // Generate ticket number if not exists
         if (ticketNumberEl) {
             if (!ticketNumberEl.textContent) {
                 ticketNumberEl.textContent = `NORI-${Date.now()}`;
             }
         }
         
-        // Add items to cart UI
         cart.forEach((item, index) => {
             const itemEl = document.createElement('div');
             itemEl.className = 'flex justify-between items-start mb-4 pb-4 border-b border-slate-700';
             
             let detailsHTML = `<h4 class="font-bold text-white">${item.name}</h4>`;
             
-            // Add customization details if any
             if (Object.keys(item.customizations).length > 0) {
                 detailsHTML += '<div class="text-xs text-slate-400 mt-1">';
                 for (const key in item.customizations) {
@@ -396,13 +407,11 @@ function updateCartUI() {
         });
     }
     
-    // Update total price
     const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     if (cartTotalEl) {
         cartTotalEl.textContent = formatRupiah(total);
     }
     
-    // Update cart count badge
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     if (cartCountEl) {
         cartCountEl.textContent = totalItems;
@@ -417,15 +426,11 @@ function updateCartUI() {
     }
 }
 
-/**
- * Process checkout
- */
 function processCheckout() {
     const customerName = document.getElementById('customer-name');
     const customerEmail = document.getElementById('customer-email');
     const ticketNumber = document.getElementById('ticket-number');
     
-    // Validate form
     if (!customerName || !customerName.value.trim()) {
         showToast('Mohon isi nama lengkap', 'error');
         customerName.focus();
@@ -438,7 +443,6 @@ function processCheckout() {
         return;
     }
     
-    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(customerEmail.value)) {
         showToast('Mohon isi alamat email yang valid', 'error');
@@ -446,7 +450,6 @@ function processCheckout() {
         return;
     }
     
-    // Generate WhatsApp message
     const phoneNumber = '6281396815717';
     let message = `Halo NORI, saya ingin memesan:\n\n`;
     message += `*Nomor Tiket: ${ticketNumber.textContent}*\n`;
@@ -470,38 +473,27 @@ function processCheckout() {
     message += `*TOTAL PESANAN: ${formatRupiah(total)}*\n\n`;
     message += `Mohon informasikan langkah selanjutnya untuk pembayaran. Terima kasih.`;
     
-    // Encode message for URL
     const encodedMessage = encodeURIComponent(message);
     const whatsappURL = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
     
-    // Open WhatsApp in new tab
     window.open(whatsappURL, '_blank');
     
-    // Show success message
     showToast('Pesanan berhasil dibuat! Silakan lanjutkan pembayaran di WhatsApp.', 'success');
     
-    // Close cart modal
     const cartModal = document.getElementById('cart-modal');
     if (cartModal) {
         closeModal(cartModal);
     }
     
-    // Clear cart after successful checkout
     cart = [];
     saveCartToStorage();
     updateCartUI();
     
-    // Clear form fields
     if (customerName) customerName.value = '';
     if (customerEmail) customerEmail.value = '';
     if (ticketNumber) ticketNumber.textContent = '';
 }
 
-/**
- * Format number to Rupiah currency
- * @param {number} number - Number to format
- * @returns {string} Formatted currency string
- */
 function formatRupiah(number) {
     return new Intl.NumberFormat('id-ID', {
         style: 'currency',
@@ -514,7 +506,6 @@ function formatRupiah(number) {
  * Modal System
  */
 function initModalSystem() {
-    // Close modals when pressing Escape key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             const openModals = document.querySelectorAll('.modal:not(.hidden)');
@@ -525,46 +516,33 @@ function initModalSystem() {
     });
 }
 
-/**
- * Open modal
- * @param {HTMLElement} modal - Modal element to open
- */
 function openModal(modal) {
     if (!modal) return;
     
     modal.classList.remove('hidden');
     
-    // Trigger reflow for animation
     void modal.offsetWidth;
     
     modal.classList.remove('opacity-0');
-    const modalContent = modal.querySelector('.bg-slate-800'); // Target the actual content div
+    const modalContent = modal.querySelector('.bg-slate-800');
     if (modalContent) {
         modalContent.classList.remove('scale-95');
     }
     
-    // Disable body scrolling
     document.body.style.overflow = 'hidden';
 }
 
-/**
- * Close modal
- * @param {HTMLElement} modal - Modal element to close
- */
 function closeModal(modal) {
     if (!modal) return;
     
     modal.classList.add('opacity-0');
-    const modalContent = modal.querySelector('.bg-slate-800'); // Target the actual content div
+    const modalContent = modal.querySelector('.bg-slate-800');
     if (modalContent) {
         modalContent.classList.add('scale-95');
     }
     
-    // Wait for animation to complete before hiding
     setTimeout(() => {
         modal.classList.add('hidden');
-        
-        // Enable body scrolling
         document.body.style.overflow = '';
     }, 300);
 }
@@ -589,12 +567,6 @@ function initFormValidation() {
     }
 }
 
-/**
- * Validate form field
- * @param {HTMLElement} field - Field to validate
- * @param {RegExp} regex - Regular expression for validation
- * @param {string} errorMessage - Error message to show
- */
 function validateField(field, regex, errorMessage) {
     if (!field) return;
     
@@ -609,7 +581,6 @@ function validateField(field, regex, errorMessage) {
         field.classList.remove('border-green-500');
         field.classList.add('border-red-500');
         
-        // Show error tooltip on focus loss
         field.addEventListener('blur', function() {
             if (!regex.test(this.value.trim()) && this.value.trim() !== '') {
                 showToast(errorMessage, 'error');
@@ -621,85 +592,35 @@ function validateField(field, regex, errorMessage) {
 /**
  * Toast Notification System
  */
-function initToast() {
-    // Create toast container if it doesn't exist
-    if (!document.getElementById('toast-container')) {
-        const toastContainer = document.createElement('div');
-        toastContainer.id = 'toast-container';
-        toastContainer.className = 'fixed top-4 right-4 z-50 space-y-2';
-        document.body.appendChild(toastContainer);
-    }
-}
-
-/**
- * Show toast notification
- * @param {string} message - Message to display
- * @param {string} type - Type of toast (success, error, warning, info)
- */
 function showToast(message, type = 'success') {
-    initToast();
-    
-    const toastContainer = document.getElementById('toast-container');
-    const toast = document.createElement('div');
-    
-    // Set toast classes based on type
-    let toastClasses = 'px-4 py-3 rounded-lg shadow-lg text-white flex items-center transform transition-all duration-300 translate-x-full';
-    let icon = '';
-    
-    switch (type) {
-        case 'success':
-            toastClasses += ' bg-green-500';
-            icon = '<i class="fas fa-check-circle mr-2"></i>';
-            break;
-        case 'error':
-            toastClasses += ' bg-red-500';
-            icon = '<i class="fas fa-exclamation-circle mr-2"></i>';
-            break;
-        case 'warning':
-            toastClasses += ' bg-yellow-500';
-            icon = '<i class="fas fa-exclamation-triangle mr-2"></i>';
-            break;
-        case 'info':
-            toastClasses += ' bg-blue-500';
-            icon = '<i class="fas fa-info-circle mr-2"></i>';
-            break;
-        default:
-            toastClasses += ' bg-gray-500';
-            icon = '<i class="fas fa-bell mr-2"></i>';
+    const toast = document.getElementById('toast');
+    if (!toast) return;
+
+    const toastIcon = toast.querySelector('i');
+    const toastMessage = toast.querySelector('p');
+
+    toast.classList.remove('bg-green-500', 'bg-red-500');
+
+    if (type === 'error') {
+        toast.classList.add('bg-red-500');
+        toastIcon.className = 'fas fa-exclamation-circle';
+    } else {
+        toast.classList.add('bg-green-500');
+        toastIcon.className = 'fas fa-check-circle';
     }
-    
-    toast.className = toastClasses;
-    toast.innerHTML = `${icon}${message}`;
-    
-    // Add toast to container
-    toastContainer.appendChild(toast);
-    
-    // Animate in
+
+    toastMessage.textContent = message;
+    toast.classList.remove('translate-x-[120%]');
+
     setTimeout(() => {
-        toast.classList.remove('translate-x-full');
-    }, 10);
-    
-    // Auto remove after 5 seconds
-    setTimeout(() => {
-        toast.classList.add('translate-x-full');
-        setTimeout(() => {
-            if (toast.parentNode) {
-                toast.parentNode.removeChild(toast);
-            }
-        }, 300);
-    }, 5000);
+        toast.classList.add('translate-x-[120%]');
+    }, 2000);
 }
 
-/**
- * Loading State Management
- */
 function initLoadingState() {
-    // You can implement loading states for API calls or heavy operations
+    // Future implementation for loading states
 }
 
-/**
- * Show loading spinner
- */
 function showLoading() {
     const loadingSpinner = document.getElementById('loading-spinner');
     if (loadingSpinner) {
@@ -707,9 +628,6 @@ function showLoading() {
     }
 }
 
-/**
- * Hide loading spinner
- */
 function hideLoading() {
     const loadingSpinner = document.getElementById('loading-spinner');
     if (loadingSpinner) {
@@ -717,16 +635,10 @@ function hideLoading() {
     }
 }
 
-/**
- * Save cart to localStorage
- */
 function saveCartToStorage() {
     localStorage.setItem('noriCart', JSON.stringify(cart));
 }
 
-/**
- * Load cart from localStorage
- */
 function loadCartFromStorage() {
     const savedCart = localStorage.getItem('noriCart');
     if (savedCart) {
