@@ -21,7 +21,9 @@ function initApp() {
     initNotificationModal();
     initFormValidation();
     initLoadingState();
-    
+    initDynamicPricing();
+    initTypingAnimation(); // <-- PENAMBAHAN: Memanggil fungsi animasi ketik
+
     // Check for saved cart items in localStorage
     loadCartFromStorage();
     
@@ -30,6 +32,59 @@ function initApp() {
     
     console.log('NORI Website initialized successfully');
 }
+
+
+/**
+ * PENAMBAHAN: Typing Animation Functionality
+ */
+function initTypingAnimation() {
+    const typingTextEl = document.getElementById('typing-text');
+    if (!typingTextEl) return;
+
+    const words = ["Desain Modern", "Kode Bersih", "Responsif Cepat", "Harga Terjangkau"];
+    let wordIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    const typingSpeed = 150;
+    const deletingSpeed = 75;
+    const delayBetweenWords = 2000;
+
+    function type() {
+        const currentWord = words[wordIndex];
+        let displayText = '';
+
+        if (isDeleting) {
+            // Hapus karakter
+            displayText = currentWord.substring(0, charIndex - 1);
+            charIndex--;
+        } else {
+            // Tambah karakter
+            displayText = currentWord.substring(0, charIndex + 1);
+            charIndex++;
+        }
+
+        typingTextEl.textContent = displayText;
+        typingTextEl.classList.add('animate-typing');
+
+        let timeout = isDeleting ? deletingSpeed : typingSpeed;
+
+        if (!isDeleting && charIndex === currentWord.length) {
+            // Jeda setelah selesai mengetik kata
+            timeout = delayBetweenWords;
+            isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            wordIndex = (wordIndex + 1) % words.length;
+             // Jeda sebelum mengetik kata baru
+            timeout = 500;
+        }
+
+        setTimeout(type, timeout);
+    }
+
+    type();
+}
+
 
 /**
  * Preloader and Entry Animation Functionality
@@ -43,29 +98,21 @@ function initPreloader() {
 
     // Hide preloader after 1.5 seconds
     setTimeout(() => {
-        // Start fade-out transition for preloader
         preloader.classList.add('opacity-0');
         
-        // Add event listener to detect end of transition
         preloader.addEventListener('transitionend', (e) => {
-            // Ensure the event is from the preloader itself
             if (e.target === preloader) {
-                // Hide preloader completely
                 preloader.style.display = 'none';
-                
-                // Show main content with a fade-in effect
                 contentWrapper.classList.remove('opacity-0');
 
-                // Trigger entry animation for hero section elements
                 revealElements.forEach(el => {
                     el.classList.add('revealed');
                 });
             }
-        }, { once: true }); // 'once' option auto-removes the listener after execution
+        }, { once: true });
 
-    }, 1500); // 1.5 second duration as requested
+    }, 1500);
 }
-
 
 /**
  * Notification Modal Functionality
@@ -78,19 +125,15 @@ function initNotificationModal() {
 
     if (!notificationButton || !notificationModal || !closeNotificationButton || !notificationDot) return;
 
-    // Function to open the notification modal
     notificationButton.addEventListener('click', () => {
         openModal(notificationModal);
-        // Hide the red dot when notifications are opened (marks as read)
         notificationDot.classList.add('hidden');
     });
 
-    // Function to close the modal with the 'X' button
     closeNotificationButton.addEventListener('click', () => {
         closeModal(notificationModal);
     });
 
-    // Function to close the modal by clicking outside the content area
     notificationModal.addEventListener('click', (e) => {
         if (e.target === notificationModal) {
             closeModal(notificationModal);
@@ -131,7 +174,6 @@ function initMobileMenu() {
         });
     });
 }
-
 
 /**
  * Scroll Animations
@@ -197,24 +239,26 @@ function initSmoothScrolling() {
 }
 
 /**
- * Cart System
+ * Cart System (UPDATED)
  */
 let cart = [];
 const products = {
     1: { 
         name: 'Source Code Template', 
         basePrice: 50000,
-        customizations: {}
     },
     2: { 
         name: 'Web Portofolio Complete', 
-        basePrice: 75000,
-        customizations: {}
+        hostingPrices: {
+            '3-bulan': 60000,
+            '6-bulan': 65000,
+            '1-tahun': 70000
+        },
+        featurePrice: 2500
     },
     3: { 
         name: 'Update Portofolio', 
-        basePrice: 15000,
-        customizations: {}
+        basePrice: 10000,
     }
 };
 
@@ -225,19 +269,15 @@ function initCartSystem() {
     const checkoutButton = document.getElementById('checkout-button');
     
     if (cartButton && cartModal) {
-        cartButton.addEventListener('click', function() {
-            openModal(cartModal);
-        });
+        cartButton.addEventListener('click', () => openModal(cartModal));
     }
     
     if (closeCartButton) {
-        closeCartButton.addEventListener('click', function() {
-            closeModal(cartModal);
-        });
+        closeCartButton.addEventListener('click', () => closeModal(cartModal));
     }
     
     if (cartModal) {
-        cartModal.addEventListener('click', function(e) {
+        cartModal.addEventListener('click', (e) => {
             if (e.target === cartModal) {
                 closeModal(cartModal);
             }
@@ -245,52 +285,99 @@ function initCartSystem() {
     }
     
     if (checkoutButton) {
-        checkoutButton.addEventListener('click', function() {
-            processCheckout();
-        });
+        checkoutButton.addEventListener('click', processCheckout);
     }
     
-    const savedCart = localStorage.getItem('noriCart');
-    if (savedCart) {
-        cart = JSON.parse(savedCart);
-    }
+    loadCartFromStorage();
 }
 
+/**
+ * Dynamic Pricing for "Web Portofolio Complete" (NEW)
+ */
+function initDynamicPricing() {
+    const hostingSelect = document.getElementById('hosting-choice');
+    const featureCheckboxes = document.querySelectorAll('.custom-feature');
+    const priceDisplay = document.querySelector('#produk .grid > div:nth-child(2) .text-3xl');
+
+    function updateCompletePortfolioPrice() {
+        if (!hostingSelect || !priceDisplay) return;
+
+        const selectedHosting = hostingSelect.value;
+        const hostingPrice = products[2].hostingPrices[selectedHosting] || 0;
+        
+        const selectedFeaturesCount = document.querySelectorAll('.custom-feature:checked').length;
+        const featuresPrice = selectedFeaturesCount * products[2].featurePrice;
+        
+        const totalPrice = hostingPrice + featuresPrice;
+        
+        priceDisplay.textContent = formatRupiah(totalPrice);
+    }
+
+    if (hostingSelect) {
+       hostingSelect.addEventListener('change', updateCompletePortfolioPrice);
+    }
+    
+    featureCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateCompletePortfolioPrice);
+    });
+
+    // Initial price calculation on load
+    updateCompletePortfolioPrice();
+}
+
+/**
+ * Calculate the total price for a product based on selected options (NEW)
+ */
+function calculateProductPrice(productId) {
+    const product = products[productId];
+    if (!product) return 0;
+    
+    if (productId === 2) { // Web Portofolio Complete
+        const hostingSelect = document.getElementById('hosting-choice');
+        const selectedHosting = hostingSelect ? hostingSelect.value : '3-bulan';
+        const hostingPrice = product.hostingPrices[selectedHosting] || 0;
+        
+        const selectedFeaturesCount = document.querySelectorAll('.custom-feature:checked').length;
+        const featuresPrice = selectedFeaturesCount * product.featurePrice;
+        
+        return hostingPrice + featuresPrice;
+    }
+    
+    // For other products, return the base price
+    return product.basePrice;
+}
+
+/**
+ * Add product to cart (UPDATED)
+ */
 function addToCart(productId) {
-    if (!products[productId]) {
+    const product = products[productId];
+    if (!product) {
         console.error('Product not found:', productId);
         showToast('Produk tidak ditemukan', 'error');
         return;
     }
     
     let customizations = {};
+    const price = calculateProductPrice(productId);
     
     if (productId === 1) {
-        const templateSelect = document.getElementById('template-choice');
-        if (templateSelect) {
-            customizations.Template = templateSelect.value;
+        const templateRadio = document.querySelector('input[name="template-choice"]:checked');
+        if (templateRadio) {
+            customizations.Template = templateRadio.value;
         }
     } else if (productId === 2) {
-        const temaRadios = document.querySelectorAll('input[name="tema"]');
+        const hostingSelect = document.getElementById('hosting-choice');
         const warnaSelect = document.getElementById('warna-choice');
-        const modeRadios = document.querySelectorAll('input[name="mode"]');
         const featureCheckboxes = document.querySelectorAll('.custom-feature:checked');
         
-        temaRadios.forEach(radio => {
-            if (radio.checked) {
-                customizations.Tema = radio.value;
-            }
-        });
+        if (hostingSelect) {
+            customizations.Hosting = hostingSelect.options[hostingSelect.selectedIndex].text;
+        }
         
         if (warnaSelect) {
             customizations.Warna = warnaSelect.value;
         }
-        
-        modeRadios.forEach(radio => {
-            if (radio.checked) {
-                customizations.Mode = radio.value;
-            }
-        });
         
         const features = Array.from(featureCheckboxes).map(cb => cb.value);
         if (features.length > 0) {
@@ -300,8 +387,8 @@ function addToCart(productId) {
     
     cart.push({
         id: productId,
-        name: products[productId].name,
-        price: products[productId].basePrice,
+        name: product.name,
+        price: price,
         quantity: 1,
         customizations: customizations
     });
@@ -368,10 +455,8 @@ function updateCartUI() {
         if (customerForm) customerForm.classList.remove('hidden');
         if (checkoutButton) checkoutButton.disabled = false;
         
-        if (ticketNumberEl) {
-            if (!ticketNumberEl.textContent) {
-                ticketNumberEl.textContent = `NORI-${Date.now()}`;
-            }
+        if (ticketNumberEl && !ticketNumberEl.textContent) {
+            ticketNumberEl.textContent = `NORI-${Date.now()}`;
         }
         
         cart.forEach((item, index) => {
@@ -415,14 +500,10 @@ function updateCartUI() {
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     if (cartCountEl) {
         cartCountEl.textContent = totalItems;
-        
-        if (totalItems > 0) {
-            cartCountEl.classList.remove('hidden', 'scale-0');
-            cartCountEl.classList.add('flex', 'scale-100');
-        } else {
-            cartCountEl.classList.add('scale-0');
-            cartCountEl.classList.remove('scale-100');
-        }
+        cartCountEl.classList.toggle('hidden', totalItems === 0);
+        cartCountEl.classList.toggle('scale-0', totalItems === 0);
+        cartCountEl.classList.toggle('flex', totalItems > 0);
+        cartCountEl.classList.toggle('scale-100', totalItems > 0);
     }
 }
 
@@ -437,14 +518,7 @@ function processCheckout() {
         return;
     }
     
-    if (!customerEmail || !customerEmail.value.trim()) {
-        showToast('Mohon isi alamat email', 'error');
-        customerEmail.focus();
-        return;
-    }
-    
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(customerEmail.value)) {
+    if (!customerEmail || !customerEmail.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail.value)) {
         showToast('Mohon isi alamat email yang valid', 'error');
         customerEmail.focus();
         return;
@@ -478,12 +552,10 @@ function processCheckout() {
     
     window.open(whatsappURL, '_blank');
     
-    showToast('Pesanan berhasil dibuat! Silakan lanjutkan pembayaran di WhatsApp.', 'success');
+    showToast('Pesanan berhasil dibuat!', 'success');
     
     const cartModal = document.getElementById('cart-modal');
-    if (cartModal) {
-        closeModal(cartModal);
-    }
+    if (cartModal) closeModal(cartModal);
     
     cart = [];
     saveCartToStorage();
@@ -506,41 +578,27 @@ function formatRupiah(number) {
  * Modal System
  */
 function initModalSystem() {
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            const openModals = document.querySelectorAll('.modal:not(.hidden)');
-            openModals.forEach(modal => {
-                closeModal(modal);
-            });
+            document.querySelectorAll('.modal:not(.hidden)').forEach(closeModal);
         }
     });
 }
 
 function openModal(modal) {
     if (!modal) return;
-    
     modal.classList.remove('hidden');
-    
-    void modal.offsetWidth;
-    
-    modal.classList.remove('opacity-0');
-    const modalContent = modal.querySelector('.bg-slate-800');
-    if (modalContent) {
-        modalContent.classList.remove('scale-95');
-    }
-    
     document.body.style.overflow = 'hidden';
+    setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        modal.querySelector('.bg-slate-800')?.classList.remove('scale-95');
+    }, 10);
 }
 
 function closeModal(modal) {
     if (!modal) return;
-    
     modal.classList.add('opacity-0');
-    const modalContent = modal.querySelector('.bg-slate-800');
-    if (modalContent) {
-        modalContent.classList.add('scale-95');
-    }
-    
+    modal.querySelector('.bg-slate-800')?.classList.add('scale-95');
     setTimeout(() => {
         modal.classList.add('hidden');
         document.body.style.overflow = '';
@@ -555,38 +613,23 @@ function initFormValidation() {
     const customerEmail = document.getElementById('customer-email');
     
     if (customerName) {
-        customerName.addEventListener('input', function() {
-            validateField(this, /^[a-zA-Z\s]{3,}$/, 'Nama minimal 3 karakter dan hanya boleh berisi huruf');
+        customerName.addEventListener('input', () => {
+            validateField(customerName, /^[a-zA-Z\s]{3,}$/, 'Nama minimal 3 karakter');
         });
     }
     
     if (customerEmail) {
-        customerEmail.addEventListener('input', function() {
-            validateField(this, /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Format email tidak valid');
+        customerEmail.addEventListener('input', () => {
+            validateField(customerEmail, /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Format email tidak valid');
         });
     }
 }
 
 function validateField(field, regex, errorMessage) {
     if (!field) return;
-    
     const isValid = regex.test(field.value.trim());
-    
-    if (field.value.trim() === '') {
-        field.classList.remove('border-green-500', 'border-red-500');
-    } else if (isValid) {
-        field.classList.remove('border-red-500');
-        field.classList.add('border-green-500');
-    } else {
-        field.classList.remove('border-green-500');
-        field.classList.add('border-red-500');
-        
-        field.addEventListener('blur', function() {
-            if (!regex.test(this.value.trim()) && this.value.trim() !== '') {
-                showToast(errorMessage, 'error');
-            }
-        });
-    }
+    field.classList.toggle('border-green-500', isValid && field.value.trim() !== '');
+    field.classList.toggle('border-red-500', !isValid && field.value.trim() !== '');
 }
 
 /**
@@ -599,8 +642,7 @@ function showToast(message, type = 'success') {
     const toastIcon = toast.querySelector('i');
     const toastMessage = toast.querySelector('p');
 
-    toast.classList.remove('bg-green-500', 'bg-red-500');
-
+    toast.className = toast.className.replace(/bg-\w+-500/, ''); // Remove old color
     if (type === 'error') {
         toast.classList.add('bg-red-500');
         toastIcon.className = 'fas fa-exclamation-circle';
@@ -614,7 +656,7 @@ function showToast(message, type = 'success') {
 
     setTimeout(() => {
         toast.classList.add('translate-x-[120%]');
-    }, 2000);
+    }, 3000);
 }
 
 function initLoadingState() {
@@ -622,17 +664,11 @@ function initLoadingState() {
 }
 
 function showLoading() {
-    const loadingSpinner = document.getElementById('loading-spinner');
-    if (loadingSpinner) {
-        loadingSpinner.classList.remove('hidden');
-    }
+    document.getElementById('loading-spinner')?.classList.remove('hidden');
 }
 
 function hideLoading() {
-    const loadingSpinner = document.getElementById('loading-spinner');
-    if (loadingSpinner) {
-        loadingSpinner.classList.add('hidden');
-    }
+    document.getElementById('loading-spinner')?.classList.add('hidden');
 }
 
 function saveCartToStorage() {

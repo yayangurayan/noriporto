@@ -1,6 +1,6 @@
 /* styles.css */
 /* Import Google Font */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display.swap');
 
 /* CSS Variables for consistent theming */
 :root {
@@ -42,7 +42,7 @@ body {
   scroll-behavior: smooth;
 }
 
-/* ===== PRELOADER STYLES (BARU) ===== */
+/* ===== PRELOADER STYLES ===== */
 #preloader.fade-out {
     opacity: 0;
     pointer-events: none;
@@ -132,37 +132,7 @@ a:hover {
   padding: 1rem 0;
 }
 
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.logo-icon {
-  font-size: 1.75rem;
-  color: var(--color-primary);
-  transition: var(--transition);
-}
-
-.logo:hover .logo-icon {
-  transform: rotate(12deg);
-}
-
-.logo-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.logo-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--color-light);
-}
-
-.logo-subtitle {
-  font-size: 0.75rem;
-  color: var(--color-slate-400);
-}
+/* NOTE: Logo styles removed as they are now handled by Tailwind CSS and img tag */
 
 .nav-menu {
   display: flex;
@@ -340,26 +310,31 @@ a:hover {
   box-shadow: var(--shadow-lg);
 }
 
-.hero-image {
-  position: relative;
-  display: flex;
-  justify-content: center;
+/* ===== PERUBAHAN: ANIMASI AURORA GLOW PADA LOGO (DARI CONTOH) ===== */
+.logo-glow {
+    background: linear-gradient(90deg, #06b6d4, #38bdf8, #818cf8, #06b6d4);
+    background-size: 250% 250%;
+    filter: blur(24px);
+    opacity: 0.85;
+    z-index: -1;
 }
 
-.hero-img {
-  width: 100%;
-  max-width: 400px;
-  height: auto;
-  border-radius: 50%;
-  border: 4px solid var(--color-slate-700);
-  box-shadow: var(--shadow-xl);
-  transition: var(--transition-slow);
+.logo-image {
+    border: 4px solid var(--color-dark);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
-.hero-img:hover {
-  border-color: var(--color-primary);
-  transform: scale(1.02);
+/* Keyframes ini adalah fallback jika script Tailwind gagal dimuat */
+@keyframes aurora-glow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+/* ===== AKHIR PERUBAHAN ===== */
 
 /* Products Section */
 .products {
@@ -378,11 +353,6 @@ a:hover {
   padding: 2rem;
   border-radius: var(--border-radius-lg);
   transition: var(--transition);
-}
-
-.product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-lg);
 }
 
 .product-card.featured {
@@ -419,26 +389,6 @@ a:hover {
   margin-bottom: 0.5rem;
 }
 
-.feature-select, .feature-radio-group, .feature-checkbox-group {
-  width: 100%;
-  margin-bottom: 1rem;
-}
-
-.feature-select {
-  background: var(--color-dark-light);
-  color: var(--color-light);
-  border: 1px solid var(--color-slate-700);
-  border-radius: var(--border-radius);
-  padding: 0.75rem;
-  outline: none;
-  transition: var(--transition);
-}
-
-.feature-select:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.2);
-}
-
 .radio-group, .checkbox-group {
   display: flex;
   gap: 1rem;
@@ -452,10 +402,6 @@ a:hover {
   font-size: 0.875rem;
   color: var(--color-slate-300);
   cursor: pointer;
-}
-
-.radio-input, .checkbox-input {
-  accent-color: var(--color-primary);
 }
 
 .product-price {
@@ -498,11 +444,6 @@ a:hover {
   border-radius: var(--border-radius-lg);
   background: var(--color-dark-light);
   transition: var(--transition);
-}
-
-.service-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-lg);
 }
 
 .service-icon {
@@ -579,11 +520,6 @@ a:hover {
   padding: 2rem;
   border-radius: var(--border-radius-lg);
   transition: var(--transition);
-}
-
-.testimonial-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-lg);
 }
 
 .testimonial-rating {
@@ -1037,7 +973,7 @@ a:hover {
   animation: slideInUp 0.6s ease forwards;
 }
 
-/* ===== SCROLL-TRIGGERED ANIMATIONS (BARU) ===== */
+/* ===== SCROLL-TRIGGERED ANIMATIONS ===== */
 .fade-in-section {
     opacity: 0;
     transform: translateY(20px);
@@ -1049,7 +985,7 @@ a:hover {
     transform: translateY(0);
 }
 
-/* ===== ENTRY ANIMATION STYLES (BARU) ===== */
+/* ===== ENTRY ANIMATION STYLES ===== */
 .reveal-on-load {
     opacity: 0;
     transform: translateY(20px);
@@ -1197,7 +1133,7 @@ a:hover {
   justify-content: space-between;
 }
 
-/* Custom Hamburger Icon Animation (FIXED) */
+/* Custom Hamburger Icon Animation */
 .hamburger-button {
     display: flex;
     flex-direction: column;
