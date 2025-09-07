@@ -155,9 +155,10 @@
                     </div>
 
                     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <!-- ===== KARTU PRODUK 1 (UPDATED) ===== -->
-                        <div class="glassmorphism p-6 rounded-xl flex flex-col fade-in-section hover:shadow-cyan-500/10 hover:shadow-lg hover:border-cyan-500/50 border border-transparent transition-all duration-300 transform hover:-translate-y-2">
-                            <i class="fas fa-file-code text-4xl text-cyan-400 mb-4"></i>
+                        <!-- ===== KARTU PRODUK 1 (UPDATED WITH DISCOUNT) ===== -->
+                        <div class="glassmorphism p-6 rounded-xl flex flex-col fade-in-section hover:shadow-cyan-500/10 hover:shadow-lg hover:border-cyan-500/50 border border-transparent transition-all duration-300 transform hover:-translate-y-2 relative">
+                            <div class="absolute top-0 left-0 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-br-lg rounded-tl-xl animate-pulse">DISKON 50%</div>
+                            <i class="fas fa-file-code text-4xl text-cyan-400 mb-4 mt-4"></i>
                             <h3 class="text-2xl font-bold text-white mb-2">Source Code Template</h3>
                             <p class="text-slate-400 mb-4 flex-grow">Dapatkan template portofolio siap pakai. Anda hanya perlu mengisi konten dan hosting sendiri.</p>
                             <div class="mb-4">
@@ -167,17 +168,21 @@
                                     <label class="flex items-center"><input type="radio" name="template-choice" value="Semi Profesional" class="form-radio text-cyan-500 bg-slate-700 border-slate-600 focus:ring-cyan-500"> <span class="ml-2 text-sm">Semi Profesional</span></label>
                                 </div>
                             </div>
-                            <div class="text-3xl font-bold text-cyan-400 mb-6">Rp 50.000</div>
+                            <div class="mb-6">
+                                <span class="text-xl text-slate-500 line-through">Rp 50.000</span>
+                                <span class="text-3xl font-bold text-cyan-400 ml-2">Rp 25.000</span>
+                            </div>
                             <button onclick="addToCart(1)" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 mt-auto transform hover:scale-[1.02] flex items-center justify-center">
                                 <i class="fas fa-cart-plus mr-2"></i>
                                 <span>Tambah ke Keranjang</span>
                             </button>
                         </div>
 
-                        <!-- ===== KARTU PRODUK 2 (UPDATED) ===== -->
-                        <div class="glassmorphism p-6 rounded-xl flex flex-col fade-in-section border-2 border-cyan-500 shadow-xl shadow-cyan-500/20 hover:shadow-cyan-500/30 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                        <!-- ===== KARTU PRODUK 2 (UPDATED WITH DISCOUNT) ===== -->
+                        <div class="glassmorphism p-6 rounded-xl flex flex-col fade-in-section border-2 border-cyan-500 shadow-xl shadow-cyan-500/20 hover:shadow-cyan-500/30 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 relative">
+                             <div class="absolute top-0 left-0 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-br-lg rounded-tl-xl animate-pulse">DISKON 50%</div>
                             <div class="absolute top-0 right-0 bg-cyan-500 text-white text-xs font-bold px-2 py-1 rounded-bl-lg rounded-tr-xl">POPULER</div>
-                            <i class="fas fa-rocket text-4xl text-cyan-400 mb-4"></i>
+                            <i class="fas fa-rocket text-4xl text-cyan-400 mb-4 mt-4"></i>
                             <h3 class="text-2xl font-bold text-white mb-2">Web Portofolio Complete</h3>
                             <p class="text-slate-400 mb-4 flex-grow">Paket lengkap! Kami buatkan, kustomisasi, dan langsung kami hosting. Cukup kirim CV, Anda terima beres.</p>
                             
@@ -207,19 +212,25 @@
                                 </div>
                             </div>
 
-                            <div class="text-3xl font-bold text-cyan-400 mb-6">Mulai Rp 60.000</div>
+                            <div id="product-2-price-display" class="mb-6">
+                                <!-- Harga akan di-render oleh JavaScript -->
+                            </div>
                             <button onclick="addToCart(2)" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 mt-auto transform hover:scale-[1.02] flex items-center justify-center">
                                 <i class="fas fa-cart-plus mr-2"></i>
                                 <span>Tambah ke Keranjang</span>
                             </button>
                         </div>
 
-                        <!-- ===== KARTU PRODUK 3 (UPDATED) ===== -->
-                        <div class="glassmorphism p-6 rounded-xl flex flex-col fade-in-section hover:shadow-cyan-500/10 hover:shadow-lg hover:border-cyan-500/50 border border-transparent transition-all duration-300 transform hover:-translate-y-2">
-                            <i class="fas fa-sync-alt text-4xl text-cyan-400 mb-4"></i>
+                        <!-- ===== KARTU PRODUK 3 (UPDATED WITH DISCOUNT) ===== -->
+                        <div class="glassmorphism p-6 rounded-xl flex flex-col fade-in-section hover:shadow-cyan-500/10 hover:shadow-lg hover:border-cyan-500/50 border border-transparent transition-all duration-300 transform hover:-translate-y-2 relative">
+                             <div class="absolute top-0 left-0 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-br-lg rounded-tl-xl animate-pulse">DISKON 50%</div>
+                            <i class="fas fa-sync-alt text-4xl text-cyan-400 mb-4 mt-4"></i>
                             <h3 class="text-2xl font-bold text-white mb-2">Update Portofolio</h3>
                             <p class="text-slate-400 mb-4 flex-grow">Sudah punya portofolio dari kami? Kami siap bantu update konten, proyek, atau informasi terbaru Anda.</p>
-                            <div class="text-3xl font-bold text-cyan-400 mb-6 mt-auto">Rp 10.000</div>
+                            <div class="mb-6 mt-auto">
+                                <span class="text-xl text-slate-500 line-through">Rp 10.000</span>
+                                <span class="text-3xl font-bold text-cyan-400 ml-2">Rp 5.000</span>
+                            </div>
                             <button onclick="addToCart(3)" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 transform hover:scale-[1.02] flex items-center justify-center">
                                 <i class="fas fa-cart-plus mr-2"></i>
                                 <span>Tambah ke Keranjang</span>

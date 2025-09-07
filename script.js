@@ -21,8 +21,8 @@ function initApp() {
     initNotificationModal();
     initFormValidation();
     initLoadingState();
-    initDynamicPricing();
-    initTypingAnimation(); // <-- PENAMBAHAN: Memanggil fungsi animasi ketik
+    initDynamicPricing(); // This function now handles discounts
+    initTypingAnimation();
 
     // Check for saved cart items in localStorage
     loadCartFromStorage();
@@ -239,9 +239,12 @@ function initSmoothScrolling() {
 }
 
 /**
- * Cart System (UPDATED)
+ * Cart System (UPDATED FOR DISCOUNT)
  */
 let cart = [];
+const DISCOUNT_RATE = 0.5; // 50% discount
+
+// Prices in this object are the ORIGINAL prices before discount
 const products = {
     1: { 
         name: 'Source Code Template', 
@@ -292,15 +295,15 @@ function initCartSystem() {
 }
 
 /**
- * Dynamic Pricing for "Web Portofolio Complete" (NEW)
+ * Dynamic Pricing for "Web Portofolio Complete" (UPDATED FOR DISCOUNT)
  */
 function initDynamicPricing() {
     const hostingSelect = document.getElementById('hosting-choice');
     const featureCheckboxes = document.querySelectorAll('.custom-feature');
-    const priceDisplay = document.querySelector('#produk .grid > div:nth-child(2) .text-3xl');
+    const priceDisplayContainer = document.getElementById('product-2-price-display');
 
     function updateCompletePortfolioPrice() {
-        if (!hostingSelect || !priceDisplay) return;
+        if (!hostingSelect || !priceDisplayContainer) return;
 
         const selectedHosting = hostingSelect.value;
         const hostingPrice = products[2].hostingPrices[selectedHosting] || 0;
@@ -308,9 +311,13 @@ function initDynamicPricing() {
         const selectedFeaturesCount = document.querySelectorAll('.custom-feature:checked').length;
         const featuresPrice = selectedFeaturesCount * products[2].featurePrice;
         
-        const totalPrice = hostingPrice + featuresPrice;
+        const originalTotalPrice = hostingPrice + featuresPrice;
+        const discountedPrice = originalTotalPrice * (1 - DISCOUNT_RATE);
         
-        priceDisplay.textContent = formatRupiah(totalPrice);
+        priceDisplayContainer.innerHTML = `
+            <span class="text-xl text-slate-500 line-through">${formatRupiah(originalTotalPrice)}</span>
+            <span class="text-3xl font-bold text-cyan-400 ml-2">${formatRupiah(discountedPrice)}</span>
+        `;
     }
 
     if (hostingSelect) {
@@ -326,12 +333,14 @@ function initDynamicPricing() {
 }
 
 /**
- * Calculate the total price for a product based on selected options (NEW)
+ * Calculate the total discounted price for a product based on selected options (UPDATED FOR DISCOUNT)
  */
 function calculateProductPrice(productId) {
     const product = products[productId];
     if (!product) return 0;
     
+    let originalPrice = 0;
+
     if (productId === 2) { // Web Portofolio Complete
         const hostingSelect = document.getElementById('hosting-choice');
         const selectedHosting = hostingSelect ? hostingSelect.value : '3-bulan';
@@ -340,11 +349,14 @@ function calculateProductPrice(productId) {
         const selectedFeaturesCount = document.querySelectorAll('.custom-feature:checked').length;
         const featuresPrice = selectedFeaturesCount * product.featurePrice;
         
-        return hostingPrice + featuresPrice;
+        originalPrice = hostingPrice + featuresPrice;
+    } else {
+        // For other products, return the base price
+        originalPrice = product.basePrice;
     }
-    
-    // For other products, return the base price
-    return product.basePrice;
+
+    // Apply discount and return the final price
+    return originalPrice * (1 - DISCOUNT_RATE);
 }
 
 /**
@@ -359,7 +371,7 @@ function addToCart(productId) {
     }
     
     let customizations = {};
-    const price = calculateProductPrice(productId);
+    const discountedPrice = calculateProductPrice(productId);
     
     if (productId === 1) {
         const templateRadio = document.querySelector('input[name="template-choice"]:checked');
@@ -388,7 +400,7 @@ function addToCart(productId) {
     cart.push({
         id: productId,
         name: product.name,
-        price: price,
+        price: discountedPrice, // Add the discounted price to the cart
         quantity: 1,
         customizations: customizations
     });
@@ -525,7 +537,7 @@ function processCheckout() {
     }
     
     const phoneNumber = '6281396815717';
-    let message = `Halo NORI, saya ingin memesan:\n\n`;
+    let message = `Halo NORI, saya ingin memesan (PROMO DISKON 50%):\n\n`;
     message += `*Nomor Tiket: ${ticketNumber.textContent}*\n`;
     message += `*Nama: ${customerName.value.trim()}*\n`;
     message += `*Email: ${customerEmail.value.trim()}*\n`;
