@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<!-- PERUBAHAN: Menambahkan 'dark' sebagai tema default -->
+<html lang="id" class="scroll-smooth dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="NORI - Jasa Pembuatan Portfolio Digital Profesional. Dapatkan website portfolio dengan harga terjangkau dan kualitas terbaik.">
-    <meta name="keywords" content="portfolio, website, jasa pembuatan website, template portfolio, hosting portfolio">
+    <meta name="keywords" content="portfolio, website, jasa pembuatan website, template portfolio, hosting portfolio, custom website">
     <title>NORI - Digital Portfolio Development</title>
     
     <link rel="stylesheet" href="style.css">
@@ -16,6 +17,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            // PERUBAHAN: Mengaktifkan mode gelap berbasis kelas
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -27,23 +30,13 @@
                         'fade-in': 'fadeIn 0.5s ease-in-out',
                         'slide-down': 'slideDown 0.3s ease-out',
                         'typing': 'typing 2s steps(22), blink .5s step-end infinite alternate',
-                        // ===== PENAMBAHAN: Animasi baru dari contoh =====
                         'aurora-glow': 'aurora-glow 8s ease infinite',
                         'float': 'float 6s ease-in-out infinite',
                     },
                     keyframes: {
-                        fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
-                        },
-                        slideDown: {
-                            '0%': { transform: 'translateY(-10px)', opacity: '0' },
-                            '100%': { transform: 'translateY(0)', opacity: '1' },
-                        },
-                         blink: {
-                          '50%': { 'border-color': 'transparent' }
-                        },
-                        // ===== PENAMBAHAN: Keyframes baru dari contoh =====
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                        slideDown: { '0%': { transform: 'translateY(-10px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
+                        blink: { '50%': { 'border-color': 'transparent' } },
                         'aurora-glow': {
                             '0%': { backgroundPosition: '0% 50%' },
                             '50%': { backgroundPosition: '100% 50%' },
@@ -60,51 +53,53 @@
     </script>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display.swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body class="antialiased bg-nori-dark text-nori-light font-inter">
+<!-- PERUBAHAN: Menambahkan kelas untuk tema terang & gelap -->
+<body class="antialiased bg-nori-light dark:bg-nori-dark text-slate-800 dark:text-nori-light font-inter">
 
-    <!-- ===== PRELOADER START (UPDATED) ===== -->
-    <div id="preloader" class="fixed inset-0 bg-nori-dark z-[9999] flex justify-center items-center transition-opacity duration-700 ease-out">
+    <!-- Preloader (Diperbarui untuk tema) -->
+    <div id="preloader" class="fixed inset-0 bg-white dark:bg-nori-dark z-[9999] flex justify-center items-center transition-opacity duration-700 ease-out">
         <div class="flex flex-col items-center space-y-4 animate-[pulse_1.5s_cubic-bezier(0.4,0,0.6,1)_infinite]">
             <img src="logo.webp" alt="NORI Logo" class="h-24 w-auto">
-            <p class="text-sm text-slate-400">Loading experience...</p>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Loading experience...</p>
         </div>
     </div>
-    <!-- ===== PRELOADER END ===== -->
 
-    <!-- ===== CONTENT WRAPPER (Initially Hidden) ===== -->
     <div id="content-wrapper" class="opacity-0 transition-opacity duration-500">
-
         <header id="header" class="glassmorphism sticky top-0 z-50 transition-all duration-300">
             <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
-                <!-- ===== HEADER LOGO (UPDATED) ===== -->
                 <a href="#home" class="flex items-center space-x-3 group">
                     <img src="logo.webp" alt="NORI Logo" class="h-12 w-auto group-hover:rotate-6 transition-transform duration-300">
                 </a>
                 
                 <div class="flex items-center space-x-8">
                     <div class="hidden md:flex items-center space-x-8">
-                        <a href="#home" class="nav-link text-slate-300 hover:text-cyan-400 transition duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-cyan-400 after:transition-all after:duration-300 hover:after:w-full">Home</a>
-                        <a href="#produk" class="nav-link text-slate-300 hover:text-cyan-400 transition duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-cyan-400 after:transition-all after:duration-300 hover:after:w-full">Produk</a>
-                        <a href="#layanan" class="nav-link text-slate-300 hover:text-cyan-400 transition duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-cyan-400 after:transition-all after:duration-300 hover:after:w-full">Layanan</a>
-                        <a href="#tentang" class="nav-link text-slate-300 hover:text-cyan-400 transition duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-cyan-400 after:transition-all after:duration-300 hover:after:w-full">Tentang Kami</a>
-                        <a href="#testimoni" class="nav-link text-slate-300 hover:text-cyan-400 transition duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-cyan-400 after:transition-all after:duration-300 hover:after:w-full">Testimoni</a>
+                        <a href="#home" class="nav-link text-slate-600 dark:text-slate-300 hover:text-cyan-500 dark:hover:text-cyan-400">Home</a>
+                        <a href="#produk" class="nav-link text-slate-600 dark:text-slate-300 hover:text-cyan-500 dark:hover:text-cyan-400">Produk</a>
+                        <a href="#layanan" class="nav-link text-slate-600 dark:text-slate-300 hover:text-cyan-500 dark:hover:text-cyan-400">Layanan</a>
+                        <a href="#tentang" class="nav-link text-slate-600 dark:text-slate-300 hover:text-cyan-500 dark:hover:text-cyan-400">Tentang Kami</a>
+                        <a href="#testimoni" class="nav-link text-slate-600 dark:text-slate-300 hover:text-cyan-500 dark:hover:text-cyan-400">Testimoni</a>
                     </div>
 
                    <div class="flex items-center space-x-4">
-                        <button id="notification-button" class="relative text-slate-300 hover:text-cyan-400 transition duration-300 group">
+                        <!-- PENAMBAHAN: Tombol Ganti Tema -->
+                        <button id="theme-toggle" class="text-slate-600 dark:text-slate-300 hover:text-cyan-500 dark:hover:text-cyan-400 transition duration-300 group">
+                            <i class="fas fa-sun text-xl group-hover:scale-110 transition-transform hidden dark:inline"></i>
+                            <i class="fas fa-moon text-xl group-hover:scale-110 transition-transform inline dark:hidden"></i>
+                        </button>
+                        
+                        <button id="notification-button" class="relative text-slate-600 dark:text-slate-300 hover:text-cyan-500 dark:hover:text-cyan-400 transition duration-300 group">
                             <i class="fas fa-bell text-xl group-hover:scale-110 transition-transform"></i>
                             <span id="notification-dot" class="absolute top-0 right-0 bg-red-500 rounded-full h-2 w-2"></span>
                         </button>
 
-                        <button id="cart-button" class="relative text-slate-300 hover:text-cyan-400 transition duration-300 group">
+                        <button id="cart-button" class="relative text-slate-600 dark:text-slate-300 hover:text-cyan-500 dark:hover:text-cyan-400 transition duration-300 group">
                             <i class="fas fa-shopping-cart text-xl group-hover:scale-110 transition-transform"></i>
                             <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center transition-all duration-300 scale-0">0</span>
                         </button>
         
-                        <button id="mobile-menu-button" class="md:hidden text-slate-300 hover:text-cyan-400 transition duration-300 hamburger-button">
+                        <button id="mobile-menu-button" class="md:hidden text-slate-600 dark:text-slate-300 hover:text-cyan-500 dark:hover:text-cyan-400 transition duration-300 hamburger-button">
                             <span></span>
                             <span></span>
                             <span></span>
@@ -115,29 +110,28 @@
         </header>
 
         <div id="mobile-menu-overlay" class="fixed inset-0 bg-black bg-opacity-70 z-40 hidden transition-opacity duration-300 opacity-0"></div>
-        <div id="mobile-menu" class="fixed top-0 right-0 h-full w-64 bg-slate-900 shadow-lg z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col pt-16">
-            <a href="#home" class="block py-4 px-6 text-slate-300 hover:bg-slate-700 hover:text-cyan-400 transition duration-300 mobile-nav-link text-lg border-b border-slate-800">Home</a>
-            <a href="#produk" class="block py-4 px-6 text-slate-300 hover:bg-slate-700 hover:text-cyan-400 transition duration-300 mobile-nav-link text-lg border-b border-slate-800">Produk</a>
-            <a href="#layanan" class="block py-4 px-6 text-slate-300 hover:bg-slate-700 hover:text-cyan-400 transition duration-300 mobile-nav-link text-lg border-b border-slate-800">Layanan</a>
-            <a href="#tentang" class="block py-4 px-6 text-slate-300 hover:bg-slate-700 hover:text-cyan-400 transition duration-300 mobile-nav-link text-lg border-b border-slate-800">Tentang Kami</a>
-            <a href="#testimoni" class="block py-4 px-6 text-slate-300 hover:bg-slate-700 hover:text-cyan-400 transition duration-300 mobile-nav-link text-lg border-b border-slate-800">Testimoni</a>
-            <a href="#kontak" class="block py-4 px-6 text-slate-300 hover:bg-slate-700 hover:text-cyan-400 transition duration-300 mobile-nav-link text-lg">Kontak</a>
+        <div id="mobile-menu" class="fixed top-0 right-0 h-full w-64 bg-white dark:bg-slate-900 shadow-lg z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col pt-16">
+            <a href="#home" class="block py-4 px-6 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-cyan-500 dark:hover:text-cyan-400 transition duration-300 mobile-nav-link text-lg border-b border-slate-200 dark:border-slate-800">Home</a>
+            <a href="#produk" class="block py-4 px-6 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-cyan-500 dark:hover:text-cyan-400 transition duration-300 mobile-nav-link text-lg border-b border-slate-200 dark:border-slate-800">Produk</a>
+            <a href="#layanan" class="block py-4 px-6 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-cyan-500 dark:hover:text-cyan-400 transition duration-300 mobile-nav-link text-lg border-b border-slate-200 dark:border-slate-800">Layanan</a>
+            <a href="#tentang" class="block py-4 px-6 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-cyan-500 dark:hover:text-cyan-400 transition duration-300 mobile-nav-link text-lg border-b border-slate-200 dark:border-slate-800">Tentang Kami</a>
+            <a href="#testimoni" class="block py-4 px-6 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-cyan-500 dark:hover:text-cyan-400 transition duration-300 mobile-nav-link text-lg border-b border-slate-200 dark:border-slate-800">Testimoni</a>
+            <a href="#kontak" class="block py-4 px-6 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-cyan-500 dark:hover:text-cyan-400 transition duration-300 mobile-nav-link text-lg">Kontak</a>
         </div>
 
         <main>
             <section id="home" class="min-h-screen flex items-center justify-center py-20 px-6">
                 <div class="container mx-auto grid md:grid-cols-2 gap-12 items-center text-center md:text-left">
                     <div class="reveal-on-load">
-                        <span class="text-cyan-400 font-semibold tracking-wider">Selamat Datang di NORI</span>
-                        <h2 class="text-4xl md:text-6xl font-extrabold text-white my-4 leading-tight">Wujudkan Portofolio Digital Impian Anda</h2>
-                        <h3 class="text-xl md:text-2xl font-semibold text-slate-300 my-4 h-8">Kami Memberikan <span id="typing-text" class="text-cyan-400 border-r-2 border-cyan-400"></span></h3>
-                        <p class="text-slate-300 text-lg mb-8">Kami membantu para profesional, kreatif, dan bisnis untuk membangun identitas digital yang memukau melalui portofolio website yang elegan, modern, dan responsif.</p>
+                        <span class="text-cyan-500 dark:text-cyan-400 font-semibold tracking-wider">Selamat Datang di NORI</span>
+                        <h2 class="text-4xl md:text-6xl font-extrabold text-slate-900 dark:text-white my-4 leading-tight">Wujudkan Portofolio Digital Impian Anda</h2>
+                        <h3 class="text-xl md:text-2xl font-semibold text-slate-700 dark:text-slate-300 my-4 h-8">Kami Memberikan <span id="typing-text" class="text-cyan-500 dark:text-cyan-400 border-r-2 border-cyan-500 dark:border-cyan-400"></span></h3>
+                        <p class="text-slate-600 dark:text-slate-300 text-lg mb-8">Kami membantu para profesional, kreatif, dan bisnis untuk membangun identitas digital yang memukau melalui portofolio website yang elegan, modern, dan responsif.</p>
                         <a href="#produk" class="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-8 rounded-full transition duration-300 shadow-lg shadow-cyan-500/30 transform hover:scale-105 inline-flex items-center group">
                             <span>Lihat Produk Kami</span>
                             <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                         </a>
                     </div>
-                    <!-- ===== PERUBAHAN: STRUKTUR BARU UNTUK ANIMASI GRADASI PADA LOGO ===== -->
                     <div class="flex justify-center reveal-on-load" data-delay="200">
                          <div class="logo-wrapper relative w-full max-w-[280px] md:max-w-sm animate-float">
                             <div class="logo-glow absolute inset-[-0.75rem] rounded-full animate-aurora-glow"></div>
@@ -147,30 +141,22 @@
                 </div>
             </section>
 
-            <section id="produk" class="py-20 px-6 bg-slate-800/50">
+            <section id="produk" class="py-20 px-6 bg-slate-100 dark:bg-slate-800/50">
                 <div class="container mx-auto">
                     <div class="text-center mb-12 fade-in-section">
-                        <h2 class="text-4xl font-bold text-white">Produk Unggulan Kami</h2>
-                        <p class="text-slate-400 mt-2 max-w-2xl mx-auto">Pilih paket yang paling sesuai dengan kebutuhan Anda, dari template siap pakai hingga kustomisasi penuh.</p>
+                        <h2 class="text-4xl font-bold text-slate-900 dark:text-white">Produk Unggulan Kami</h2>
+                        <p class="text-slate-600 dark:text-slate-400 mt-2 max-w-2xl mx-auto">Pilih paket yang paling sesuai dengan kebutuhan Anda, dari template siap pakai hingga kustomisasi penuh.</p>
                     </div>
 
                     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <!-- ===== KARTU PRODUK 1 (UPDATED WITH DISCOUNT) ===== -->
+                        <!-- Produk 1: Custom Portfolio (Source Code) -->
                         <div class="glassmorphism p-6 rounded-xl flex flex-col fade-in-section hover:shadow-cyan-500/10 hover:shadow-lg hover:border-cyan-500/50 border border-transparent transition-all duration-300 transform hover:-translate-y-2 relative">
-                            <div class="absolute top-0 left-0 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-br-lg rounded-tl-xl animate-pulse">DISKON 50%</div>
-                            <i class="fas fa-file-code text-4xl text-cyan-400 mb-4 mt-4"></i>
-                            <h3 class="text-2xl font-bold text-white mb-2">Source Code Template</h3>
-                            <p class="text-slate-400 mb-4 flex-grow">Dapatkan template portofolio siap pakai. Anda hanya perlu mengisi konten dan hosting sendiri.</p>
-                            <div class="mb-4">
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Pilih Tipe Template:</label>
-                                <div class="space-y-2">
-                                    <label class="flex items-center"><input type="radio" name="template-choice" value="Profesional" class="form-radio text-cyan-500 bg-slate-700 border-slate-600 focus:ring-cyan-500" checked> <span class="ml-2 text-sm">Profesional</span></label>
-                                    <label class="flex items-center"><input type="radio" name="template-choice" value="Semi Profesional" class="form-radio text-cyan-500 bg-slate-700 border-slate-600 focus:ring-cyan-500"> <span class="ml-2 text-sm">Semi Profesional</span></label>
-                                </div>
-                            </div>
-                            <div class="mb-6">
-                                <span class="text-xl text-slate-500 line-through">Rp 50.000</span>
-                                <span class="text-3xl font-bold text-cyan-400 ml-2">Rp 25.000</span>
+                            <div class="absolute top-0 left-0 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-br-lg rounded-tl-xl animate-pulse">DISKON 25%</div>
+                            <i class="fas fa-file-code text-4xl text-cyan-500 dark:text-cyan-400 mb-4 mt-4"></i>
+                            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Custom Portfolio (Source Code)</h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-4 flex-grow">Dapatkan source code template portofolio siap pakai. Anda bisa custom sendiri dan hanya perlu hosting.</p>
+                            <div id="product-1-price-display" class="mb-6 mt-auto">
+                                <!-- Harga akan di-render oleh JavaScript -->
                             </div>
                             <button onclick="addToCart(1)" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 mt-auto transform hover:scale-[1.02] flex items-center justify-center">
                                 <i class="fas fa-cart-plus mr-2"></i>
@@ -178,60 +164,97 @@
                             </button>
                         </div>
 
-                        <!-- ===== KARTU PRODUK 2 (UPDATED WITH DISCOUNT) ===== -->
-                        <div class="glassmorphism p-6 rounded-xl flex flex-col fade-in-section border-2 border-cyan-500 shadow-xl shadow-cyan-500/20 hover:shadow-cyan-500/30 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 relative">
-                             <div class="absolute top-0 left-0 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-br-lg rounded-tl-xl animate-pulse">DISKON 50%</div>
-                            <div class="absolute top-0 right-0 bg-cyan-500 text-white text-xs font-bold px-2 py-1 rounded-bl-lg rounded-tr-xl">POPULER</div>
-                            <i class="fas fa-rocket text-4xl text-cyan-400 mb-4 mt-4"></i>
-                            <h3 class="text-2xl font-bold text-white mb-2">Web Portofolio Complete</h3>
-                            <p class="text-slate-400 mb-4 flex-grow">Paket lengkap! Kami buatkan, kustomisasi, dan langsung kami hosting. Cukup kirim CV, Anda terima beres.</p>
-                            
+                        <!-- Produk 2: Web Portofolio Complete -->
+                        <div class="glassmorphism p-6 rounded-xl flex flex-col fade-in-section border-2 border-amber-500 shadow-xl shadow-amber-500/20 hover:shadow-amber-500/30 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 relative">
+                             <div class="absolute top-0 left-0 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-br-lg rounded-tl-xl animate-pulse">DISKON 25%</div>
+                            <div class="absolute top-0 right-0 bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded-bl-lg rounded-tr-xl">POPULER</div>
+                            <i class="fas fa-rocket text-4xl text-amber-500 dark:text-amber-400 mb-4 mt-4"></i>
+                            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Web Portofolio Complete</h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-4 flex-grow">Paket lengkap! Kami buatkan, kustomisasi, dan langsung kami hosting. Cukup kirim CV, Anda terima beres.</p>
                             <div class="space-y-4 mb-4">
                                 <div>
-                                    <h4 class="text-sm font-medium text-slate-300 mb-2">Waktu Hosting:</h4>
-                                    <select id="hosting-choice" class="w-full bg-slate-700 border border-slate-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-colors duration-300">
+                                    <h4 class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Waktu Hosting:</h4>
+                                    <select id="hosting-choice" class="w-full bg-slate-200 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md py-2 px-3 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500">
                                         <option value="3-bulan">3 Bulan</option>
                                         <option value="6-bulan">6 Bulan</option>
                                         <option value="1-tahun">1 Tahun</option>
                                     </select>
                                 </div>
                                  <div>
-                                    <h4 class="text-sm font-medium text-slate-300 mb-2">Warna Dominan:</h4>
-                                    <select id="warna-choice" class="w-full bg-slate-700 border border-slate-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-colors duration-300">
-                                        <option>Biru</option><option>Kuning</option><option>Jingga</option><option>Hijau</option><option>Ungu</option>
+                                    <h4 class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Warna Dominan:</h4>
+                                    <select id="warna-choice" class="w-full bg-slate-200 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md py-2 px-3 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500">
+                                        <option>Biru (Tema Terang)</option><option>Biru (Tema Gelap)</option>
+                                        <option>Kuning (Tema Terang)</option><option>Kuning (Tema Gelap)</option>
+                                        <option>Jingga (Tema Terang)</option><option>Jingga (Tema Gelap)</option>
+                                        <option>Hijau (Tema Terang)</option><option>Hijau (Tema Gelap)</option>
+                                        <option>Ungu (Tema Terang)</option><option>Ungu (Tema Gelap)</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <h4 class="text-sm font-medium text-slate-300 mb-2">Fitur Tambahan (Opsional, +Rp 2.500/fitur):</h4>
+                                    <h4 class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Fitur Tambahan (Opsional, +Rp 5.000/fitur):</h4>
                                     <div class="space-y-1">
-                                        <label class="flex items-center"><input type="checkbox" value="Animasi Lanjutan" class="form-checkbox text-cyan-500 bg-slate-700 border-slate-600 rounded focus:ring-cyan-500 custom-feature"> <span class="ml-2 text-sm">Animasi Lanjutan</span></label>
-                                        <label class="flex items-center"><input type="checkbox" value="Formulir Kontak" class="form-checkbox text-cyan-500 bg-slate-700 border-slate-600 rounded focus:ring-cyan-500 custom-feature"> <span class="ml-2 text-sm">Formulir Kontak</span></label>
-                                        <label class="flex items-center"><input type="checkbox" value="Integrasi Blog" class="form-checkbox text-cyan-500 bg-slate-700 border-slate-600 rounded focus:ring-cyan-500 custom-feature"> <span class="ml-2 text-sm">Integrasi Blog</span></label>
-                                        <label class="flex items-center"><input type="checkbox" value="Dual Tampilan" class="form-checkbox text-cyan-500 bg-slate-700 border-slate-600 rounded focus:ring-cyan-500 custom-feature"> <span class="ml-2 text-sm">Dual Tampilan (Gelap & Terang)</span></label>
+                                        <label class="flex items-center"><input type="checkbox" value="Animasi Lanjutan" class="form-checkbox text-amber-500 bg-slate-100 dark:bg-slate-700 border-slate-300 dark:border-slate-600 rounded focus:ring-amber-500 custom-feature"> <span class="ml-2 text-sm">Animasi Lanjutan</span></label>
+                                        <label class="flex items-center"><input type="checkbox" value="Formulir Kontak" class="form-checkbox text-amber-500 bg-slate-100 dark:bg-slate-700 border-slate-300 dark:border-slate-600 rounded focus:ring-amber-500 custom-feature"> <span class="ml-2 text-sm">Formulir Kontak</span></label>
+                                        <label class="flex items-center"><input type="checkbox" value="Integrasi Blog" class="form-checkbox text-amber-500 bg-slate-100 dark:bg-slate-700 border-slate-300 dark:border-slate-600 rounded focus:ring-amber-500 custom-feature"> <span class="ml-2 text-sm">Integrasi Blog</span></label>
+                                        <label class="flex items-center"><input type="checkbox" value="Dual Tampilan" class="form-checkbox text-amber-500 bg-slate-100 dark:bg-slate-700 border-slate-300 dark:border-slate-600 rounded focus:ring-amber-500 custom-feature"> <span class="ml-2 text-sm">Dual Tampilan (Otomatis)</span></label>
                                     </div>
                                 </div>
                             </div>
-
-                            <div id="product-2-price-display" class="mb-6">
-                                <!-- Harga akan di-render oleh JavaScript -->
-                            </div>
-                            <button onclick="addToCart(2)" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 mt-auto transform hover:scale-[1.02] flex items-center justify-center">
+                            <div id="product-2-price-display" class="mb-6"></div>
+                            <button onclick="addToCart(2)" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 mt-auto transform hover:scale-[1.02] flex items-center justify-center">
                                 <i class="fas fa-cart-plus mr-2"></i>
                                 <span>Tambah ke Keranjang</span>
                             </button>
                         </div>
 
-                        <!-- ===== KARTU PRODUK 3 (UPDATED WITH DISCOUNT) ===== -->
+                        <!-- Produk 3: Revisi / Update Source Code -->
                         <div class="glassmorphism p-6 rounded-xl flex flex-col fade-in-section hover:shadow-cyan-500/10 hover:shadow-lg hover:border-cyan-500/50 border border-transparent transition-all duration-300 transform hover:-translate-y-2 relative">
-                             <div class="absolute top-0 left-0 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-br-lg rounded-tl-xl animate-pulse">DISKON 50%</div>
-                            <i class="fas fa-sync-alt text-4xl text-cyan-400 mb-4 mt-4"></i>
-                            <h3 class="text-2xl font-bold text-white mb-2">Update Portofolio</h3>
-                            <p class="text-slate-400 mb-4 flex-grow">Sudah punya portofolio dari kami? Kami siap bantu update konten, proyek, atau informasi terbaru Anda.</p>
-                            <div class="mb-6 mt-auto">
-                                <span class="text-xl text-slate-500 line-through">Rp 10.000</span>
-                                <span class="text-3xl font-bold text-cyan-400 ml-2">Rp 5.000</span>
+                             <div class="absolute top-0 left-0 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-br-lg rounded-tl-xl animate-pulse">DISKON 25%</div>
+                            <i class="fas fa-sync-alt text-4xl text-cyan-500 dark:text-cyan-400 mb-4 mt-4"></i>
+                            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Revisi / Update Source Code</h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-4 flex-grow">Sudah punya source code dari kami? Kami siap bantu update konten, proyek, atau informasi terbaru Anda.</p>
+                            <div id="product-3-price-display" class="mb-6 mt-auto">
+                                <!-- Harga akan di-render oleh JavaScript -->
                             </div>
                             <button onclick="addToCart(3)" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 transform hover:scale-[1.02] flex items-center justify-center">
+                                <i class="fas fa-cart-plus mr-2"></i>
+                                <span>Tambah ke Keranjang</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Produk 4: Jasa Hosting -->
+                        <div class="glassmorphism p-6 rounded-xl flex flex-col fade-in-section hover:shadow-cyan-500/10 hover:shadow-lg hover:border-cyan-500/50 border border-transparent transition-all duration-300 transform hover:-translate-y-2 relative">
+                             <div class="absolute top-0 left-0 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-br-lg rounded-tl-xl animate-pulse">DISKON 25%</div>
+                            <i class="fas fa-server text-4xl text-cyan-500 dark:text-cyan-400 mb-4 mt-4"></i>
+                            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Jasa Hosting Domain</h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-4 flex-grow">Hosting cepat dan aman untuk 1 website Anda. Pilih domain .ID atau .COM sesuai kebutuhan.</p>
+                            <div class="mb-4">
+                                <h4 class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Pilih Durasi:</h4>
+                                <select id="hosting-duration-4" class="w-full bg-slate-200 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md py-2 px-3 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                                    <option value="1-bulan">1 Bulan</option>
+                                    <option value="3-bulan">3 Bulan</option>
+                                    <option value="6-bulan">6 Bulan</option>
+                                    <option value="1-tahun">1 Tahun</option>
+                                </select>
+                            </div>
+                            <div id="product-4-price-display" class="mb-6"></div>
+                            <button onclick="addToCart(4)" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 mt-auto transform hover:scale-[1.02] flex items-center justify-center">
+                                <i class="fas fa-cart-plus mr-2"></i>
+                                <span>Tambah ke Keranjang</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Produk 5: Custom Website (PERUBAHAN GAYA) -->
+                        <div class="md:col-span-2 glassmorphism p-6 rounded-xl flex flex-col fade-in-section border-2 border-amber-500 shadow-xl shadow-amber-500/20 hover:shadow-amber-500/30 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 relative">
+                             <div class="absolute top-0 left-0 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-br-lg rounded-tl-xl animate-pulse">DISKON 25%</div>
+                             <div class="absolute top-0 right-0 bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded-bl-lg rounded-tr-xl">PREMIUM</div>
+                            <i class="fas fa-crown text-4xl text-amber-500 dark:text-amber-400 mb-4 mt-4"></i>
+                            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Custom Website (Toko/Personal)</h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-4 flex-grow">Wujudkan website impian Anda dari nol. Dilengkapi Backend (MySQL, ExpressJS), bisa custom fitur apapun. <br class="hidden sm:block"><b class="font-semibold">Bonus: Gratis Hosting 1 Tahun & 3x Revisi.</b></p>
+                            <div id="product-5-price-display" class="mb-6 mt-auto">
+                                <!-- Harga akan di-render oleh JavaScript -->
+                            </div>
+                            <button onclick="addToCart(5)" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 transform hover:scale-[1.02] flex items-center justify-center">
                                 <i class="fas fa-cart-plus mr-2"></i>
                                 <span>Tambah ke Keranjang</span>
                             </button>
@@ -243,48 +266,44 @@
             <section id="layanan" class="py-20 px-6">
                 <div class="container mx-auto">
                     <div class="text-center mb-12 fade-in-section">
-                        <h2 class="text-4xl font-bold text-white">Layanan Kami</h2>
-                        <p class="text-slate-400 mt-2 max-w-2xl mx-auto">Tiga pilar utama yang kami tawarkan untuk memastikan kepuasan Anda.</p>
+                        <h2 class="text-4xl font-bold text-slate-900 dark:text-white">Layanan Kami</h2>
+                        <p class="text-slate-600 dark:text-slate-400 mt-2 max-w-2xl mx-auto">Tiga pilar utama yang kami tawarkan untuk memastikan kepuasan Anda.</p>
                     </div>
                     <div class="grid md:grid-cols-3 gap-8 text-center">
-                        <!-- Kartu Layanan 1 -->
-                        <div class="bg-slate-800 p-8 rounded-lg fade-in-section hover:bg-slate-700/50 hover:transform hover:-translate-y-2 transition-all duration-300">
-                            <div class="bg-cyan-500/10 text-cyan-400 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <div class="bg-white dark:bg-slate-800 p-8 rounded-lg fade-in-section shadow-md dark:shadow-none hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:transform hover:-translate-y-2 transition-all duration-300">
+                            <div class="bg-cyan-100 dark:bg-cyan-500/10 text-cyan-500 dark:text-cyan-400 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
                                 <i class="fas fa-drafting-compass text-3xl"></i>
                             </div>
-                            <h3 class="text-xl font-bold text-white mb-2">Pembuatan Portofolio Profesional</h3>
-                            <p class="text-slate-400">Desain yang bersih, modern, dan disesuaikan untuk menonjolkan keahlian Anda secara maksimal.</p>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Pembuatan Portofolio Profesional</h3>
+                            <p class="text-slate-600 dark:text-slate-400">Desain yang bersih, modern, dan disesuaikan untuk menonjolkan keahlian Anda secara maksimal.</p>
                         </div>
-                        <!-- Kartu Layanan 2 -->
-                        <div class="bg-slate-800 p-8 rounded-lg fade-in-section hover:bg-slate-700/50 hover:transform hover:-translate-y-2 transition-all duration-300">
-                            <div class="bg-cyan-500/10 text-cyan-400 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <div class="bg-white dark:bg-slate-800 p-8 rounded-lg fade-in-section shadow-md dark:shadow-none hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:transform hover:-translate-y-2 transition-all duration-300">
+                            <div class="bg-cyan-100 dark:bg-cyan-500/10 text-cyan-500 dark:text-cyan-400 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
                                 <i class="fas fa-server text-3xl"></i>
                             </div>
-                            <h3 class="text-xl font-bold text-white mb-2">Hosting Cepat & Aman</h3>
-                            <p class="text-slate-400">Kami menangani semua teknis hosting, memastikan website Anda selalu online dan dapat diakses dengan cepat.</p>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Hosting Cepat & Aman</h3>
+                            <p class="text-slate-600 dark:text-slate-400">Kami menangani semua teknis hosting, memastikan website Anda selalu online dan dapat diakses dengan cepat.</p>
                         </div>
-                        <!-- Kartu Layanan 3 -->
-                        <div class="bg-slate-800 p-8 rounded-lg fade-in-section hover:bg-slate-700/50 hover:transform hover:-translate-y-2 transition-all duration-300">
-                            <div class="bg-cyan-500/10 text-cyan-400 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <div class="bg-white dark:bg-slate-800 p-8 rounded-lg fade-in-section shadow-md dark:shadow-none hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:transform hover:-translate-y-2 transition-all duration-300">
+                            <div class="bg-cyan-100 dark:bg-cyan-500/10 text-cyan-500 dark:text-cyan-400 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
                                <i class="fas fa-headset text-3xl"></i>
                             </div>
-                            <h3 class="text-xl font-bold text-white mb-2">Respon Super Cepat</h3>
-                            <p class="text-slate-400">Butuh bantuan atau konsultasi? Tim kami siap merespon pertanyaan Anda dalam hitungan menit.</p>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Respon Super Cepat</h3>
+                            <p class="text-slate-600 dark:text-slate-400">Butuh bantuan atau konsultasi? Tim kami siap merespon pertanyaan Anda dalam hitungan menit.</p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section id="tentang" class="py-20 px-6 bg-slate-800/50">
+            <section id="tentang" class="py-20 px-6 bg-slate-100 dark:bg-slate-800/50">
                 <div class="container mx-auto grid md:grid-cols-2 gap-12 items-center">
-                     <!-- Kontainer gambar yang diperbarui -->
                      <div class="fade-in-section w-full h-80 md:h-96 rounded-lg overflow-hidden shadow-lg hover:shadow-cyan-500/20 transition-shadow duration-300 group">
                          <img src="about-picture.webp" alt="Penampilan Tim NORI" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
                     </div>
                     <div class="fade-in-section">
-                        <h2 class="text-4xl font-bold text-white mb-4">Tentang NORI</h2>
-                        <p class="text-slate-300 mb-4">NORI lahir dari semangat kolaborasi tiga individu dengan hasrat yang sama terhadap teknologi dan desain. Kami percaya bahwa setiap orang berhak memiliki representasi digital yang kuat dan profesional. Misi kami adalah menyediakan solusi portofolio digital yang tidak hanya indah secara visual, tetapi juga fungsional, terjangkau, dan mudah dikelola.</p>
-                        <p class="text-slate-300">Kami berdedikasi untuk membantu Anda menceritakan kisah profesional Anda kepada dunia dengan cara yang paling efektif.</p>
+                        <h2 class="text-4xl font-bold text-slate-900 dark:text-white mb-4">Tentang NORI</h2>
+                        <p class="text-slate-600 dark:text-slate-300 mb-4">NORI lahir dari semangat kolaborasi tiga individu dengan hasrat yang sama terhadap teknologi dan desain. Kami percaya bahwa setiap orang berhak memiliki representasi digital yang kuat dan profesional. Misi kami adalah menyediakan solusi portofolio digital yang tidak hanya indah secara visual, tetapi juga fungsional, terjangkau, dan mudah dikelola.</p>
+                        <p class="text-slate-600 dark:text-slate-300">Kami berdedikasi untuk membantu Anda menceritakan kisah profesional Anda kepada dunia dengan cara yang paling efektif.</p>
                     </div>
                 </div>
             </section>
@@ -292,124 +311,47 @@
             <section id="testimoni" class="py-20 px-6">
                 <div class="container mx-auto">
                     <div class="text-center mb-12 fade-in-section">
-                        <h2 class="text-4xl font-bold text-white">Apa Kata Klien Kami</h2>
-                        <p class="text-slate-400 mt-2">Kepuasan mereka adalah prioritas utama kami.</p>
+                        <h2 class="text-4xl font-bold text-slate-900 dark:text-white">Apa Kata Klien Kami</h2>
+                        <p class="text-slate-600 dark:text-slate-400 mt-2">Kepuasan mereka adalah prioritas utama kami.</p>
                     </div>
                     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <!-- Kartu Testimoni 1 -->
-                        <div class="glassmorphism p-6 rounded-lg fade-in-section hover:transform hover:-translate-y-2 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-300">
-                            <div class="flex mb-4">
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                            </div>
-                            <p class="text-slate-300 italic mb-4">"Harganya murah dan terjangkau untuk mahasiswa, cocok untuk yang baru mulai"</p>
-                            <div class="flex items-center">
-                                <img src="https://placehold.co/40x40/0f172a/e2e8f0?text=AD" alt="Foto profil klien Andi Darmawan" class="w-10 h-10 rounded-full mr-4">
-                                <div>
-                                    <h4 class="font-bold text-white">Al. At. Tejana</h4>
-                                    <p class="text-sm text-slate-400">Mahasiswa Bisdig 23</p>
-                                </div>
-                            </div>
+                        <!-- PERBAIKAN BUG BORDER: Mengubah 'border-transparent' menjadi warna yang terlihat -->
+                        <div class="glassmorphism p-6 rounded-lg fade-in-section hover:transform hover:-translate-y-2 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-300 border border-slate-200 dark:border-slate-700">
+                            <div class="flex mb-4"><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i></div>
+                            <p class="text-slate-600 dark:text-slate-300 italic mb-4">"Harganya murah dan terjangkau untuk mahasiswa, cocok untuk yang baru mulai"</p>
+                            <div class="flex items-center"><img src="https://placehold.co/40x40/0f172a/e2e8f0?text=AD" alt="Foto Klien" class="w-10 h-10 rounded-full mr-4"><div><h4 class="font-bold text-slate-900 dark:text-white">Al. At. Tejana</h4><p class="text-sm text-slate-500 dark:text-slate-400">Mahasiswa Bisdig 23</p></div></div>
                         </div>
-                        <!-- Kartu Testimoni 2 -->
-                         <div class="glassmorphism p-6 rounded-lg fade-in-section hover:transform hover:-translate-y-2 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-300">
-                            <div class="flex mb-4">
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                            </div>
-                            <p class="text-slate-300 italic mb-4">"Desainnya bagus untuk harga yang di kasih, thanks mimin tercinta"</p>
-                            <div class="flex items-center">
-                                <img src="https://placehold.co/40x40/0f172a/e2e8f0?text=BS" alt="Foto profil klien Bunga Sari" class="w-10 h-10 rounded-full mr-4">
-                                <div>
-                                    <h4 class="font-bold text-white">Fadhlul</h4>
-                                    <p class="text-sm text-slate-400">Siswa SMK Komputer</p>
-                                </div>
-                            </div>
+                        <div class="glassmorphism p-6 rounded-lg fade-in-section hover:transform hover:-translate-y-2 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-300 border border-slate-200 dark:border-slate-700">
+                            <div class="flex mb-4"><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i></div>
+                            <p class="text-slate-600 dark:text-slate-300 italic mb-4">"Desainnya bagus untuk harga yang di kasih, thanks mimin tercinta"</p>
+                            <div class="flex items-center"><img src="https://placehold.co/40x40/0f172a/e2e8f0?text=BS" alt="Foto Klien" class="w-10 h-10 rounded-full mr-4"><div><h4 class="font-bold text-slate-900 dark:text-white">Fadhlul</h4><p class="text-sm text-slate-500 dark:text-slate-400">Siswa SMK Komputer</p></div></div>
                         </div>
-                        <!-- Kartu Testimoni 3 -->
-                         <div class="glassmorphism p-6 rounded-lg fade-in-section hover:transform hover:-translate-y-2 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-300">
-                            <div class="flex mb-4">
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                            </div>
-                            <p class="text-slate-300 italic mb-4">"Gak kecewa pesan website di sini, semoga bisa bareng Nori terus"</p>
-                            <div class="flex items-center">
-                                <img src="https://placehold.co/40x40/0f172a/e2e8f0?text=CP" alt="Foto profil klien Citra Prameswari" class="w-10 h-10 rounded-full mr-4">
-                                <div>
-                                    <h4 class="font-bold text-white">Arief Zaidan</h4>
-                                    <p class="text-sm text-slate-400">Mahasiswa Bisdig 23</p>
-                                </div>
-                            </div>
+                        <div class="glassmorphism p-6 rounded-lg fade-in-section hover:transform hover:-translate-y-2 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-300 border border-slate-200 dark:border-slate-700">
+                            <div class="flex mb-4"><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i></div>
+                            <p class="text-slate-600 dark:text-slate-300 italic mb-4">"Gak kecewa pesan website di sini, semoga bisa bareng Nori terus"</p>
+                            <div class="flex items-center"><img src="https://placehold.co/40x40/0f172a/e2e8f0?text=CP" alt="Foto Klien" class="w-10 h-10 rounded-full mr-4"><div><h4 class="font-bold text-slate-900 dark:text-white">Arief Zaidan</h4><p class="text-sm text-slate-500 dark:text-slate-400">Mahasiswa Bisdig 23</p></div></div>
                         </div>
-                        <!-- Kartu Testimoni 4 -->
-                         <div class="glassmorphism p-6 rounded-lg fade-in-section hover:transform hover:-translate-y-2 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-300">
-                            <div class="flex mb-4">
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                            </div>
-                            <p class="text-slate-300 italic mb-4">"Upcoming"</p>
-                            <div class="flex items-center">
-                                <img src="https://placehold.co/40x40/0f172a/e2e8f0?text=DE" alt="Foto profil klien Doni Eka" class="w-10 h-10 rounded-full mr-4">
-                                <div>
-                                    <h4 class="font-bold text-white">Anonim</h4>
-                                    <p class="text-sm text-slate-400">Mahasiswa</p>
-                                </div>
-                            </div>
+                        <div class="glassmorphism p-6 rounded-lg fade-in-section hover:transform hover:-translate-y-2 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-300 border border-slate-200 dark:border-slate-700">
+                            <div class="flex mb-4"><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i></div>
+                            <p class="text-slate-600 dark:text-slate-300 italic mb-4">"Upcoming"</p>
+                            <div class="flex items-center"><img src="https://placehold.co/40x40/0f172a/e2e8f0?text=DE" alt="Foto Klien" class="w-10 h-10 rounded-full mr-4"><div><h4 class="font-bold text-slate-900 dark:text-white">Anonim</h4><p class="text-sm text-slate-500 dark:text-slate-400">Mahasiswa</p></div></div>
                         </div>
-                        <!-- Kartu Testimoni 5 -->
-                         <div class="glassmorphism p-6 rounded-lg fade-in-section hover:transform hover:-translate-y-2 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-300">
-                            <div class="flex mb-4">
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                            </div>
-                            <p class="text-slate-300 italic mb-4">"Upcoming"</p>
-                            <div class="flex items-center">
-                                <img src="https://placehold.co/40x40/0f172a/e2e8f0?text=FS" alt="Foto profil klien Fitri Setiawati" class="w-10 h-10 rounded-full mr-4">
-                                <div>
-                                    <h4 class="font-bold text-white">Anonim</h4>
-                                    <p class="text-sm text-slate-400">Mahasiswa</p>
-                                </div>
-                            </div>
+                        <div class="glassmorphism p-6 rounded-lg fade-in-section hover:transform hover:-translate-y-2 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-300 border border-slate-200 dark:border-slate-700">
+                            <div class="flex mb-4"><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i></div>
+                            <p class="text-slate-600 dark:text-slate-300 italic mb-4">"Upcoming"</p>
+                            <div class="flex items-center"><img src="https://placehold.co/40x40/0f172a/e2e8f0?text=FS" alt="Foto Klien" class="w-10 h-10 rounded-full mr-4"><div><h4 class="font-bold text-slate-900 dark:text-white">Anonim</h4><p class="text-sm text-slate-500 dark:text-slate-400">Mahasiswa</p></div></div>
                         </div>
-                        <!-- Kartu Testimoni 6 -->
-                         <div class="glassmorphism p-6 rounded-lg fade-in-section hover:transform hover:-translate-y-2 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-300">
-                            <div class="flex mb-4">
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                                <i class="fas fa-star text-yellow-400"></i>
-                            </div>
-                            <p class="text-slate-300 italic mb-4">"Upcoming"</p>
-                            <div class="flex items-center">
-                                <img src="https://placehold.co/40x40/0f172a/e2e8f0?text=GS" alt="Foto profil klien Gilang Samudra" class="w-10 h-10 rounded-full mr-4">
-                                <div>
-                                    <h4 class="font-bold text-white">Anonim</h4>
-                                    <p class="text-sm text-slate-400">Mahasiswa</p>
-                                </div>
-                            </div>
+                        <div class="glassmorphism p-6 rounded-lg fade-in-section hover:transform hover:-translate-y-2 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-300 border border-slate-200 dark:border-slate-700">
+                            <div class="flex mb-4"><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i><i class="fas fa-star text-yellow-400"></i></div>
+                            <p class="text-slate-600 dark:text-slate-300 italic mb-4">"Upcoming"</p>
+                            <div class="flex items-center"><img src="https://placehold.co/40x40/0f172a/e2e8f0?text=GS" alt="Foto Klien" class="w-10 h-10 rounded-full mr-4"><div><h4 class="font-bold text-slate-900 dark:text-white">Anonim</h4><p class="text-sm text-slate-500 dark:text-slate-400">Mahasiswa</p></div></div>
                         </div>
                     </div>
                 </div>
             </section>
         </main>
 
-        <footer id="kontak" class="bg-slate-900 text-slate-400 py-16 px-6">
+        <footer id="kontak" class="bg-slate-200 dark:bg-slate-900 text-slate-600 dark:text-slate-400 py-16 px-6">
             <div class="container mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
                     <div class="space-y-4 fade-in-section">
@@ -418,35 +360,26 @@
                         </a>
                         <p class="text-sm">Membantu para profesional, kreatif, dan bisnis untuk membangun identitas digital yang memukau.</p>
                     </div>
-                    
                     <div class="space-y-4 fade-in-section">
-                        <h3 class="text-lg font-semibold text-white tracking-wider">Navigasi</h3>
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-white tracking-wider">Navigasi</h3>
                         <ul class="space-y-2">
-                            <li><a href="#produk" class="hover:text-cyan-400 transition-colors">Produk</a></li>
-                            <li><a href="#layanan" class="hover:text-cyan-400 transition-colors">Layanan</a></li>
-                            <li><a href="#tentang" class="hover:text-cyan-400 transition-colors">Tentang Kami</a></li>
-                            <li><a href="#testimoni" class="hover:text-cyan-400 transition-colors">Testimoni</a></li>
+                            <li><a href="#produk" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors">Produk</a></li>
+                            <li><a href="#layanan" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors">Layanan</a></li>
+                            <li><a href="#tentang" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors">Tentang Kami</a></li>
+                            <li><a href="#testimoni" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors">Testimoni</a></li>
                         </ul>
                     </div>
-                    
                     <div class="space-y-4 fade-in-section">
-                        <h3 class="text-lg font-semibold text-white tracking-wider">Hubungi Kami</h3>
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-white tracking-wider">Hubungi Kami</h3>
                         <ul class="space-y-2">
-                            <li class="flex items-center justify-center md:justify-start gap-3">
-                                <i class="fab fa-whatsapp text-cyan-400"></i>
-                                <a href="https://api.whatsapp.com/send?phone=6281396815717" target="_blank" class="hover:text-cyan-400 transition-colors">+62 813-9681-5717</a>
-                            </li>
-                            <li class="flex items-center justify-center md:justify-start gap-3">
-                                <i class="fas fa-envelope text-cyan-400"></i>
-                                <a href="mailto:noricreative48@gmail.com" class="hover:text-cyan-400 transition-colors">noricreative48@gmail.com</a>
-                            </li>
+                            <li class="flex items-center justify-center md:justify-start gap-3"><i class="fab fa-whatsapp text-cyan-500 dark:text-cyan-400"></i><a href="https://api.whatsapp.com/send?phone=6281396815717" target="_blank" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors">+62 813-9681-5717</a></li>
+                            <li class="flex items-center justify-center md:justify-start gap-3"><i class="fas fa-envelope text-cyan-500 dark:text-cyan-400"></i><a href="mailto:noricreative48@gmail.com" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors">noricreative48@gmail.com</a></li>
                         </ul>
                     </div>
                 </div>
-                
-                <div class="mt-12 pt-8 border-t border-slate-700 text-center">
+                <div class="mt-12 pt-8 border-t border-slate-300 dark:border-slate-700 text-center">
                      <div class="flex justify-center space-x-6 mb-6">
-                        <a href="https://www.instagram.com/nori.creativee?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" class="hover:text-cyan-400 transition duration-300 transform hover:-translate-y-1"><i class="fab fa-instagram text-2xl"></i></a>
+                        <a href="https://www.instagram.com/nori.creativee?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition duration-300 transform hover:-translate-y-1"><i class="fab fa-instagram text-2xl"></i></a>
                     </div>
                     <p class="text-sm">&copy; 2025 NORI - Digital Portfolio Development. All Rights Reserved.</p>
                 </div>
@@ -454,27 +387,27 @@
         </footer>
         
         <div id="cart-modal" class="fixed inset-0 bg-black bg-opacity-70 z-50 flex justify-center items-center p-4 hidden transition-opacity duration-300 opacity-0">
-            <div class="bg-slate-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col transform transition-transform duration-300 scale-95">
-                <div class="flex justify-between items-center p-4 border-b border-slate-700">
-                    <h3 class="text-xl font-bold text-white">Keranjang Belanja Anda</h3>
-                    <button id="close-cart-button" class="text-slate-400 hover:text-white transition duration-300 text-2xl">&times;</button>
+            <div class="bg-white dark:bg-slate-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col transform transition-transform duration-300 scale-95">
+                <div class="flex justify-between items-center p-4 border-b border-slate-200 dark:border-slate-700">
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white">Keranjang Belanja Anda</h3>
+                    <button id="close-cart-button" class="text-slate-400 hover:text-slate-800 dark:hover:text-white transition duration-300 text-2xl">&times;</button>
                 </div>
                 <div id="cart-items-container" class="p-6 overflow-y-auto flex-grow">
-                    <p id="empty-cart-message" class="text-slate-400 text-center">Keranjang Anda masih kosong.</p>
+                    <p id="empty-cart-message" class="text-slate-500 dark:text-slate-400 text-center">Keranjang Anda masih kosong.</p>
                 </div>
-                <div class="p-6 border-t border-slate-700 bg-slate-800/80 space-y-4">
+                <div class="p-6 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 space-y-4">
                     <div id="customer-data-form" class="hidden space-y-4">
-                        <p class="text-sm text-cyan-400">
-                            <i class="fas fa-ticket-alt mr-2"></i>Nomor Tiket Pesanan: <strong id="ticket-number" class="text-white"></strong>
-                        </p>
-                        <input type="text" id="customer-name" placeholder="Nama Lengkap Anda" class="w-full bg-slate-700 border border-slate-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-colors duration-300">
-                         <input type="email" id="customer-email" placeholder="Alamat Email Anda" class="w-full bg-slate-700 border border-slate-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-colors duration-300">
+                        <p class="text-sm text-cyan-500 dark:text-cyan-400"><i class="fas fa-ticket-alt mr-2"></i>Nomor Tiket Pesanan: <strong id="ticket-number" class="text-slate-800 dark:text-white"></strong></p>
+                        <input type="text" id="customer-name" placeholder="Nama Lengkap Anda" class="w-full bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md py-2 px-3 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                        <input type="email" id="customer-email" placeholder="Alamat Email Anda" class="w-full bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md py-2 px-3 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                        <!-- PENAMBAHAN: Fitur Catatan Pemesanan -->
+                        <textarea id="customer-notes" placeholder="Catatan untuk pesanan (opsional)..." rows="3" class="w-full bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md py-2 px-3 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"></textarea>
                     </div>
-                    <div class="flex justify-between items-center text-white font-bold">
+                    <div class="flex justify-between items-center text-slate-800 dark:text-white font-bold">
                         <span>Total:</span>
                         <span id="cart-total">Rp 0</span>
                     </div>
-                    <button id="checkout-button" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-md transition duration-300 flex items-center justify-center space-x-2 disabled:bg-slate-600 disabled:cursor-not-allowed transform hover:scale-[1.02]" disabled>
+                    <button id="checkout-button" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-md transition duration-300 flex items-center justify-center space-x-2 disabled:bg-slate-400 dark:disabled:bg-slate-600 disabled:cursor-not-allowed transform hover:scale-[1.02]" disabled>
                         <i class="fab fa-whatsapp"></i>
                         <span>Pesan via WhatsApp</span>
                     </button>
@@ -483,46 +416,25 @@
         </div>
         
         <div id="notification-modal" class="fixed inset-0 bg-black bg-opacity-70 z-50 flex justify-center items-center p-4 hidden transition-opacity duration-300 opacity-0">
-            <div class="bg-slate-800 rounded-lg shadow-xl w-full max-w-md max-h-[90vh] flex flex-col transform transition-transform duration-300 scale-95">
-                <div class="flex justify-between items-center p-4 border-b border-slate-700">
-                    <h3 class="text-xl font-bold text-white flex items-center"><i class="fas fa-bell mr-3 text-cyan-400"></i>Notifikasi Terbaru</h3>
-                    <button id="close-notification-button" class="text-slate-400 hover:text-white transition duration-300 text-2xl">&times;</button>
+            <div class="bg-white dark:bg-slate-800 rounded-lg shadow-xl w-full max-w-md max-h-[90vh] flex flex-col transform transition-transform duration-300 scale-95">
+                <div class="flex justify-between items-center p-4 border-b border-slate-200 dark:border-slate-700">
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center"><i class="fas fa-bell mr-3 text-cyan-500 dark:text-cyan-400"></i>Notifikasi Terbaru</h3>
+                    <button id="close-notification-button" class="text-slate-400 hover:text-slate-800 dark:hover:text-white transition duration-300 text-2xl">&times;</button>
                 </div>
                 <div id="notification-list" class="p-6 overflow-y-auto flex-grow space-y-5">
-                    <div class="flex items-start gap-4 p-4 bg-slate-700/50 rounded-lg">
-                        <div class="bg-cyan-500/10 text-cyan-400 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-rocket"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-white">Promo Terbatas selama Grand Opening</h4>
-                            <p class="text-sm text-slate-400 mt-1">Promo ini hanya berlaku selama 2 Minggu pertama launching hingga 20 September</p>
-                            <span class="text-xs text-slate-500 mt-2 block">5 September 2025</span>
-                        </div>
+                    <div class="flex items-start gap-4 p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg">
+                        <div class="bg-cyan-100 dark:bg-cyan-500/10 text-cyan-500 dark:text-cyan-400 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"><i class="fas fa-rocket"></i></div>
+                        <div><h4 class="font-semibold text-slate-800 dark:text-white">Promo Terbatas selama Grand Opening</h4><p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Promo ini hanya berlaku selama 2 Minggu pertama launching hingga 20 September</p><span class="text-xs text-slate-500 mt-2 block">5 September 2025</span></div>
                     </div>
-                    <div class="flex items-start gap-4 p-4 bg-slate-700/50 rounded-lg">
-                        <div class="bg-green-500/10 text-green-400 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-calendar-alt"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-white">KAMI TELAH HADIR UNTUK ANDA</h4>
-                            <p class="text-sm text-slate-400 mt-1">Nikmati pengalaman ekslusif dalam pembuatan portofolio hanya sekali klik di NORI</p>
-                            <span class="text-xs text-slate-500 mt-2 block">5 September 2025</span>
-                        </div>
+                    <div class="flex items-start gap-4 p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg">
+                        <div class="bg-green-100 dark:bg-green-500/10 text-green-500 dark:text-green-400 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"><i class="fas fa-calendar-alt"></i></div>
+                        <div><h4 class="font-semibold text-slate-800 dark:text-white">KAMI TELAH HADIR UNTUK ANDA</h4><p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Nikmati pengalaman ekslusif dalam pembuatan portofolio hanya sekali klik di NORI</p><span class="text-xs text-slate-500 mt-2 block">5 September 2025</span></div>
                     </div>
-                    <div class="flex items-start gap-4 p-4 bg-slate-700/50 rounded-lg">
-                        <div class="bg-yellow-500/10 text-yellow-400 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-white">Pemberitahuan Maintenance</h4>
-                            <p class="text-sm text-slate-400 mt-1">Akan ada maintenance terjadwal pada 21-22 September 2025 pukul 00:00 - 23:59 WIB. Mohon maaf atas ketidaknyamanannya.</p>
-                            <span class="text-xs text-slate-500 mt-2 block">5 September 2025</span>
-                        </div>
+                    <div class="flex items-start gap-4 p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg">
+                        <div class="bg-yellow-100 dark:bg-yellow-500/10 text-yellow-500 dark:text-yellow-400 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div><h4 class="font-semibold text-slate-800 dark:text-white">Pemberitahuan Maintenance</h4><p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Akan ada maintenance terjadwal pada 21-22 September 2025 pukul 00:00 - 23:59 WIB. Mohon maaf atas ketidaknyamanannya.</p><span class="text-xs text-slate-500 mt-2 block">5 September 2025</span></div>
                     </div>
-                     <div id="no-notification-message" class="text-center text-slate-500 py-8 hidden">
-                        <i class="fas fa-bell-slash text-4xl mb-4"></i>
-                        <p>Belum ada notifikasi terbaru.</p>
-                    </div>
+                     <div id="no-notification-message" class="text-center text-slate-500 py-8 hidden"><i class="fas fa-bell-slash text-4xl mb-4"></i><p>Belum ada notifikasi terbaru.</p></div>
                 </div>
             </div>
         </div>
@@ -536,7 +448,7 @@
             <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-cyan-500"></div>
         </div>
     
-    </div> <!-- End of content-wrapper -->
+    </div>
 
     <script src="script.js"></script>
 </body>

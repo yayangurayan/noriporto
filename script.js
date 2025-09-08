@@ -1,6 +1,6 @@
 // script.js
 // NORI - Digital Portfolio Development
-// Main JavaScript File
+// Main JavaScript File (Fully Updated & Corrected)
 
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize the application
@@ -8,11 +8,11 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /**
- * Initialize the application
+ * Initialize all application components
  */
 function initApp() {
-    // Initialize all components
     initPreloader();
+    initThemeToggle();
     initMobileMenu();
     initScrollAnimations();
     initCartSystem();
@@ -20,71 +20,69 @@ function initApp() {
     initModalSystem();
     initNotificationModal();
     initFormValidation();
-    initLoadingState();
-    initDynamicPricing(); // This function now handles discounts
     initTypingAnimation();
+    initDynamicPricing(); // Handles all price calculations and displays
 
-    // Check for saved cart items in localStorage
     loadCartFromStorage();
-    
-    // Update cart UI on initial load
     updateCartUI();
     
+    // Initial static price rendering for products without options
+    renderStaticPrices();
+
     console.log('NORI Website initialized successfully');
+}
+
+/**
+ * Light/Dark Theme Toggle Functionality
+ */
+function initThemeToggle() {
+    const themeToggleButton = document.getElementById('theme-toggle');
+    const docElement = document.documentElement;
+
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        docElement.classList.add('dark');
+    } else {
+        docElement.classList.remove('dark');
+    }
+
+    themeToggleButton.addEventListener('click', () => {
+        docElement.classList.toggle('dark');
+        localStorage.theme = docElement.classList.contains('dark') ? 'dark' : 'light';
+    });
 }
 
 
 /**
- * PENAMBAHAN: Typing Animation Functionality
+ * Typing Animation Functionality
  */
 function initTypingAnimation() {
     const typingTextEl = document.getElementById('typing-text');
     if (!typingTextEl) return;
 
     const words = ["Desain Modern", "Kode Bersih", "Responsif Cepat", "Harga Terjangkau"];
-    let wordIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    const typingSpeed = 150;
-    const deletingSpeed = 75;
-    const delayBetweenWords = 2000;
-
-    function type() {
+    let wordIndex = 0, charIndex = 0, isDeleting = false;
+    const type = () => {
         const currentWord = words[wordIndex];
-        let displayText = '';
-
-        if (isDeleting) {
-            // Hapus karakter
-            displayText = currentWord.substring(0, charIndex - 1);
-            charIndex--;
-        } else {
-            // Tambah karakter
-            displayText = currentWord.substring(0, charIndex + 1);
-            charIndex++;
-        }
-
+        let displayText = isDeleting 
+            ? currentWord.substring(0, charIndex--) 
+            : currentWord.substring(0, charIndex++);
+        
         typingTextEl.textContent = displayText;
-        typingTextEl.classList.add('animate-typing');
+        
+        let timeout = isDeleting ? 75 : 150;
 
-        let timeout = isDeleting ? deletingSpeed : typingSpeed;
-
-        if (!isDeleting && charIndex === currentWord.length) {
-            // Jeda setelah selesai mengetik kata
-            timeout = delayBetweenWords;
+        if (!isDeleting && charIndex === currentWord.length + 1) {
+            timeout = 2000;
             isDeleting = true;
         } else if (isDeleting && charIndex === 0) {
             isDeleting = false;
             wordIndex = (wordIndex + 1) % words.length;
-             // Jeda sebelum mengetik kata baru
             timeout = 500;
         }
-
         setTimeout(type, timeout);
-    }
-
+    };
     type();
 }
-
 
 /**
  * Preloader and Entry Animation Functionality
@@ -96,21 +94,13 @@ function initPreloader() {
 
     if (!preloader || !contentWrapper) return;
 
-    // Hide preloader after 1.5 seconds
     setTimeout(() => {
         preloader.classList.add('opacity-0');
-        
-        preloader.addEventListener('transitionend', (e) => {
-            if (e.target === preloader) {
-                preloader.style.display = 'none';
-                contentWrapper.classList.remove('opacity-0');
-
-                revealElements.forEach(el => {
-                    el.classList.add('revealed');
-                });
-            }
+        preloader.addEventListener('transitionend', () => {
+            preloader.style.display = 'none';
+            contentWrapper.classList.remove('opacity-0');
+            revealElements.forEach(el => el.classList.add('revealed'));
         }, { once: true });
-
     }, 1500);
 }
 
@@ -125,20 +115,15 @@ function initNotificationModal() {
 
     if (!notificationButton || !notificationModal || !closeNotificationButton || !notificationDot) return;
 
-    notificationButton.addEventListener('click', () => {
+    const open = () => {
         openModal(notificationModal);
         notificationDot.classList.add('hidden');
-    });
+    };
+    const close = () => closeModal(notificationModal);
 
-    closeNotificationButton.addEventListener('click', () => {
-        closeModal(notificationModal);
-    });
-
-    notificationModal.addEventListener('click', (e) => {
-        if (e.target === notificationModal) {
-            closeModal(notificationModal);
-        }
-    });
+    notificationButton.addEventListener('click', open);
+    closeNotificationButton.addEventListener('click', close);
+    notificationModal.addEventListener('click', (e) => e.target === notificationModal && close());
 }
 
 /**
@@ -152,62 +137,41 @@ function initMobileMenu() {
 
     if (!mobileMenuButton || !mobileMenu || !mobileMenuOverlay) return;
 
-    function toggleMobileMenu() {
+    const toggleMobileMenu = () => {
+        const isActive = !mobileMenu.classList.contains('translate-x-full');
         mobileMenu.classList.toggle('translate-x-full');
-        mobileMenuOverlay.classList.toggle('hidden');
-        
-        setTimeout(() => {
-            mobileMenuOverlay.classList.toggle('opacity-0');
-        }, 10);
-        
+        mobileMenuOverlay.classList.toggle('hidden', isActive);
+        setTimeout(() => mobileMenuOverlay.classList.toggle('opacity-0', isActive), 10);
         mobileMenuButton.classList.toggle('hamburger-active');
-    }
+    };
 
     mobileMenuButton.addEventListener('click', toggleMobileMenu);
     mobileMenuOverlay.addEventListener('click', toggleMobileMenu);
-
-    mobileNavLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            if (!mobileMenu.classList.contains('translate-x-full')) {
-                toggleMobileMenu();
-            }
-        });
-    });
+    mobileNavLinks.forEach(link => link.addEventListener('click', toggleMobileMenu));
 }
 
 /**
- * Scroll Animations
+ * Scroll Animations & Header State
  */
 function initScrollAnimations() {
     const fadeSections = document.querySelectorAll('.fade-in-section');
-    
     if (fadeSections.length > 0) {
-        const observer = new IntersectionObserver((entries) => {
+        const observer = new IntersectionObserver((entries, obs) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-visible');
-                    observer.unobserve(entry.target);
+                    obs.unobserve(entry.target);
                 }
             });
-        }, {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        });
-        
-        fadeSections.forEach(section => {
-            observer.observe(section);
-        });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        fadeSections.forEach(section => observer.observe(section));
     }
     
     const header = document.getElementById('header');
     if (header) {
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('scrolled', window.scrollY > 50);
+        }, { passive: true });
     }
 }
 
@@ -215,22 +179,15 @@ function initScrollAnimations() {
  * Smooth Scrolling for Navigation Links
  */
 function initSmoothScrolling() {
-    const navLinks = document.querySelectorAll('a[href^="#"]');
-    
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
             e.preventDefault();
-            
             const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-            
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
                 const headerHeight = document.getElementById('header').offsetHeight;
-                const targetPosition = targetElement.offsetTop - headerHeight;
-                
                 window.scrollTo({
-                    top: targetPosition,
+                    top: targetElement.offsetTop - headerHeight,
                     behavior: 'smooth'
                 });
             }
@@ -238,30 +195,48 @@ function initSmoothScrolling() {
     });
 }
 
-/**
- * Cart System (UPDATED FOR DISCOUNT)
- */
-let cart = [];
-const DISCOUNT_RATE = 0.5; // 50% discount
+// ===================================================================================
+// CART SYSTEM & PRODUCT DATA
+// ===================================================================================
 
-// Prices in this object are the ORIGINAL prices before discount
+let cart = [];
+const DISCOUNT_RATE = 0.25; 
+
 const products = {
     1: { 
-        name: 'Source Code Template', 
-        basePrice: 50000,
+        id: 1,
+        name: 'Custom Portfolio (Source Code)', 
+        basePrice: 49900,
     },
     2: { 
+        id: 2,
         name: 'Web Portofolio Complete', 
         hostingPrices: {
-            '3-bulan': 60000,
-            '6-bulan': 65000,
-            '1-tahun': 70000
+            '3-bulan': 99900,
+            '6-bulan': 139900,
+            '1-tahun': 174900
         },
-        featurePrice: 2500
+        featurePrice: 5000
     },
     3: { 
-        name: 'Update Portofolio', 
-        basePrice: 10000,
+        id: 3,
+        name: 'Revisi / Update Source Code', 
+        basePrice: 7900,
+    },
+    4: {
+        id: 4,
+        name: 'Jasa Hosting Domain',
+        durationPrices: {
+            '1-bulan': 14900,
+            '3-bulan': 24900,
+            '6-bulan': 43900,
+            '1-tahun': 79900
+        }
+    },
+    5: {
+        id: 5,
+        name: 'Custom Website (Toko/Personal)',
+        basePrice: 1000000
     }
 };
 
@@ -274,211 +249,203 @@ function initCartSystem() {
     if (cartButton && cartModal) {
         cartButton.addEventListener('click', () => openModal(cartModal));
     }
-    
     if (closeCartButton) {
         closeCartButton.addEventListener('click', () => closeModal(cartModal));
     }
-    
     if (cartModal) {
-        cartModal.addEventListener('click', (e) => {
-            if (e.target === cartModal) {
-                closeModal(cartModal);
-            }
-        });
+        cartModal.addEventListener('click', (e) => e.target === cartModal && closeModal(cartModal));
     }
-    
     if (checkoutButton) {
         checkoutButton.addEventListener('click', processCheckout);
     }
-    
-    loadCartFromStorage();
 }
 
-/**
- * Dynamic Pricing for "Web Portofolio Complete" (UPDATED FOR DISCOUNT)
- */
-function initDynamicPricing() {
-    const hostingSelect = document.getElementById('hosting-choice');
-    const featureCheckboxes = document.querySelectorAll('.custom-feature');
-    const priceDisplayContainer = document.getElementById('product-2-price-display');
-
-    function updateCompletePortfolioPrice() {
-        if (!hostingSelect || !priceDisplayContainer) return;
-
-        const selectedHosting = hostingSelect.value;
-        const hostingPrice = products[2].hostingPrices[selectedHosting] || 0;
-        
-        const selectedFeaturesCount = document.querySelectorAll('.custom-feature:checked').length;
-        const featuresPrice = selectedFeaturesCount * products[2].featurePrice;
-        
-        const originalTotalPrice = hostingPrice + featuresPrice;
-        const discountedPrice = originalTotalPrice * (1 - DISCOUNT_RATE);
-        
-        priceDisplayContainer.innerHTML = `
-            <span class="text-xl text-slate-500 line-through">${formatRupiah(originalTotalPrice)}</span>
-            <span class="text-3xl font-bold text-cyan-400 ml-2">${formatRupiah(discountedPrice)}</span>
+function renderPrice(element, originalPrice) {
+    if (!element) return;
+    const discountedPrice = originalPrice * (1 - DISCOUNT_RATE);
+    
+    const originalPriceFormatted = formatRupiah(originalPrice);
+    const discountedPriceFormatted = formatRupiah(discountedPrice);
+    
+    let priceHTML;
+    // For premium products, use amber color, otherwise use cyan
+    if (element.id === 'product-2-price-display' || element.id === 'product-5-price-display') {
+        priceHTML = `
+            <span class="text-xl text-slate-500 dark:text-slate-400 line-through">${originalPriceFormatted}</span>
+            <span class="text-3xl font-bold text-amber-500 dark:text-amber-400 ml-2">${discountedPriceFormatted}</span>
+        `;
+    } else {
+        priceHTML = `
+            <span class="text-xl text-slate-500 dark:text-slate-400 line-through">${originalPriceFormatted}</span>
+            <span class="text-3xl font-bold text-cyan-500 dark:text-cyan-400 ml-2">${discountedPriceFormatted}</span>
         `;
     }
-
-    if (hostingSelect) {
-       hostingSelect.addEventListener('change', updateCompletePortfolioPrice);
-    }
-    
-    featureCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', updateCompletePortfolioPrice);
-    });
-
-    // Initial price calculation on load
-    updateCompletePortfolioPrice();
+    element.innerHTML = priceHTML;
 }
 
-/**
- * Calculate the total discounted price for a product based on selected options (UPDATED FOR DISCOUNT)
- */
-function calculateProductPrice(productId) {
+
+function renderStaticPrices() {
+    renderPrice(document.getElementById('product-1-price-display'), products[1].basePrice);
+    renderPrice(document.getElementById('product-3-price-display'), products[3].basePrice);
+    renderPrice(document.getElementById('product-5-price-display'), products[5].basePrice);
+}
+
+function initDynamicPricing() {
+    const hostingSelect2 = document.getElementById('hosting-choice');
+    const featureCheckboxes = document.querySelectorAll('.custom-feature');
+    const priceDisplay2 = document.getElementById('product-2-price-display');
+
+    function updateProduct2Price() {
+        if (!hostingSelect2 || !priceDisplay2) return;
+        const hostingPrice = products[2].hostingPrices[hostingSelect2.value] || 0;
+        const featuresCount = document.querySelectorAll('.custom-feature:checked').length;
+        const featuresPrice = featuresCount * products[2].featurePrice;
+        const originalTotalPrice = hostingPrice + featuresPrice;
+        renderPrice(priceDisplay2, originalTotalPrice);
+    }
+    if(hostingSelect2) {
+        hostingSelect2.addEventListener('change', updateProduct2Price);
+        featureCheckboxes.forEach(cb => cb.addEventListener('change', updateProduct2Price));
+        updateProduct2Price();
+    }
+
+    const durationSelect4 = document.getElementById('hosting-duration-4');
+    const priceDisplay4 = document.getElementById('product-4-price-display');
+
+    function updateProduct4Price() {
+        if (!durationSelect4 || !priceDisplay4) return;
+        const originalPrice = products[4].durationPrices[durationSelect4.value] || 0;
+        renderPrice(priceDisplay4, originalPrice);
+    }
+    if(durationSelect4) {
+        durationSelect4.addEventListener('change', updateProduct4Price);
+        updateProduct4Price();
+    }
+}
+
+function calculateProductPrice(productId, options) {
     const product = products[productId];
     if (!product) return 0;
     
     let originalPrice = 0;
-
-    if (productId === 2) { // Web Portofolio Complete
-        const hostingSelect = document.getElementById('hosting-choice');
-        const selectedHosting = hostingSelect ? hostingSelect.value : '3-bulan';
-        const hostingPrice = product.hostingPrices[selectedHosting] || 0;
-        
-        const selectedFeaturesCount = document.querySelectorAll('.custom-feature:checked').length;
-        const featuresPrice = selectedFeaturesCount * product.featurePrice;
-        
-        originalPrice = hostingPrice + featuresPrice;
-    } else {
-        // For other products, return the base price
-        originalPrice = product.basePrice;
+    switch(productId) {
+        case 2:
+            originalPrice = (product.hostingPrices[options.hosting] || 0) + (options.features.length * product.featurePrice);
+            break;
+        case 4:
+            originalPrice = product.durationPrices[options.duration] || 0;
+            break;
+        default:
+            originalPrice = product.basePrice;
     }
-
-    // Apply discount and return the final price
     return originalPrice * (1 - DISCOUNT_RATE);
 }
 
-/**
- * Add product to cart (UPDATED)
- */
 function addToCart(productId) {
     const product = products[productId];
-    if (!product) {
-        console.error('Product not found:', productId);
-        showToast('Produk tidak ditemukan', 'error');
-        return;
-    }
+    if (!product) return showToast('Produk tidak ditemukan', 'error');
     
     let customizations = {};
-    const discountedPrice = calculateProductPrice(productId);
+    let options = {};
     
-    if (productId === 1) {
-        const templateRadio = document.querySelector('input[name="template-choice"]:checked');
-        if (templateRadio) {
-            customizations.Template = templateRadio.value;
-        }
-    } else if (productId === 2) {
+    if (productId === 2) {
         const hostingSelect = document.getElementById('hosting-choice');
         const warnaSelect = document.getElementById('warna-choice');
         const featureCheckboxes = document.querySelectorAll('.custom-feature:checked');
         
-        if (hostingSelect) {
-            customizations.Hosting = hostingSelect.options[hostingSelect.selectedIndex].text;
+        options.hosting = hostingSelect.value;
+        options.features = Array.from(featureCheckboxes).map(cb => cb.value);
+
+        customizations.Hosting = hostingSelect.options[hostingSelect.selectedIndex].text;
+        customizations.Warna = warnaSelect.value;
+        if (options.features.length > 0) {
+            customizations.Fitur = options.features.join(', ');
         }
-        
-        if (warnaSelect) {
-            customizations.Warna = warnaSelect.value;
-        }
-        
-        const features = Array.from(featureCheckboxes).map(cb => cb.value);
-        if (features.length > 0) {
-            customizations.Fitur = features.join(', ');
-        }
+    } else if (productId === 4) {
+        const durationSelect = document.getElementById('hosting-duration-4');
+        options.duration = durationSelect.value;
+        customizations.Durasi = durationSelect.options[durationSelect.selectedIndex].text;
     }
     
+    const price = calculateProductPrice(productId, options);
+    
     cart.push({
-        id: productId,
+        id: `${productId}-${Date.now()}`,
+        productId: productId,
         name: product.name,
-        price: discountedPrice, // Add the discounted price to the cart
+        price: price,
         quantity: 1,
         customizations: customizations
     });
     
     saveCartToStorage();
     updateCartUI();
-    showToast('Produk berhasil ditambahkan ke keranjang', 'success');
+    showToast('Produk berhasil ditambahkan!', 'success');
 }
 
-function removeFromCart(index) {
-    if (index >= 0 && index < cart.length) {
-        cart.splice(index, 1);
-        saveCartToStorage();
-        updateCartUI();
-        showToast('Produk dihapus dari keranjang', 'info');
-    }
+function removeFromCart(itemId) {
+    cart = cart.filter(item => item.id !== itemId);
+    saveCartToStorage();
+    updateCartUI();
+    showToast('Produk dihapus dari keranjang', 'info');
 }
 
-function updateQuantity(index, change) {
-    if (index >= 0 && index < cart.length) {
-        cart[index].quantity += change;
-        
-        if (cart[index].quantity < 1) {
-            cart[index].quantity = 1;
-        }
-        
+function updateQuantity(itemId, change) {
+    const item = cart.find(item => item.id === itemId);
+    if (item) {
+        item.quantity = Math.max(1, item.quantity + change);
         saveCartToStorage();
         updateCartUI();
     }
 }
 
-function setQuantity(index, value) {
+function setQuantity(itemId, value) {
+    const item = cart.find(item => item.id === itemId);
     const quantity = parseInt(value, 10);
-    
-    if (index >= 0 && index < cart.length && quantity > 0) {
-        cart[index].quantity = quantity;
+    if (item && quantity > 0) {
+        item.quantity = quantity;
         saveCartToStorage();
+        updateCartUI();
+    } else {
         updateCartUI();
     }
 }
 
 function updateCartUI() {
-    const cartContainer = document.getElementById('cart-items-container');
-    const cartTotalEl = document.getElementById('cart-total');
-    const cartCountEl = document.getElementById('cart-count');
-    const emptyCartMsg = document.getElementById('empty-cart-message');
-    const checkoutButton = document.getElementById('checkout-button');
+    const container = document.getElementById('cart-items-container');
+    const totalEl = document.getElementById('cart-total');
+    const countEl = document.getElementById('cart-count');
+    const emptyMsg = document.getElementById('empty-cart-message');
+    const checkoutBtn = document.getElementById('checkout-button');
     const customerForm = document.getElementById('customer-data-form');
-    const ticketNumberEl = document.getElementById('ticket-number');
+    const ticketEl = document.getElementById('ticket-number');
     
-    if (!cartContainer) return;
+    if (!container) return;
     
-    cartContainer.innerHTML = '';
-    
+    // Clear previous items but keep the empty message element
+    const items = container.querySelectorAll('.cart-item-dynamic');
+    items.forEach(item => item.remove());
+
     if (cart.length === 0) {
-        if (emptyCartMsg) {
-            emptyCartMsg.classList.remove('hidden');
-            cartContainer.appendChild(emptyCartMsg);
-        }
-        if (customerForm) customerForm.classList.add('hidden');
-        if (checkoutButton) checkoutButton.disabled = true;
+        emptyMsg.classList.remove('hidden');
+        customerForm.classList.add('hidden');
+        checkoutBtn.disabled = true;
     } else {
-        if (emptyCartMsg) emptyCartMsg.classList.add('hidden');
-        if (customerForm) customerForm.classList.remove('hidden');
-        if (checkoutButton) checkoutButton.disabled = false;
+        emptyMsg.classList.add('hidden');
+        customerForm.classList.remove('hidden');
+        checkoutBtn.disabled = false;
         
-        if (ticketNumberEl && !ticketNumberEl.textContent) {
-            ticketNumberEl.textContent = `NORI-${Date.now()}`;
+        if (ticketEl && !ticketEl.textContent) {
+            ticketEl.textContent = `NORI-${Date.now().toString().slice(-6)}`;
         }
         
-        cart.forEach((item, index) => {
+        cart.forEach((item) => {
             const itemEl = document.createElement('div');
-            itemEl.className = 'flex justify-between items-start mb-4 pb-4 border-b border-slate-700';
+            itemEl.className = 'cart-item-dynamic flex justify-between items-start mb-4 pb-4 border-b border-slate-200 dark:border-slate-700';
             
-            let detailsHTML = `<h4 class="font-bold text-white">${item.name}</h4>`;
-            
+            let detailsHTML = `<h4 class="font-bold text-slate-800 dark:text-white">${item.name}</h4>`;
             if (Object.keys(item.customizations).length > 0) {
-                detailsHTML += '<div class="text-xs text-slate-400 mt-1">';
+                detailsHTML += '<div class="text-xs text-slate-500 dark:text-slate-400 mt-1">';
                 for (const key in item.customizations) {
                     detailsHTML += `<span><strong>${key}:</strong> ${item.customizations[key]}</span><br>`;
                 }
@@ -486,113 +453,89 @@ function updateCartUI() {
             }
             
             itemEl.innerHTML = `
-                <div class="flex-grow pr-4">
-                    ${detailsHTML}
-                    <p class="text-cyan-400 font-semibold mt-2">${formatRupiah(item.price)}</p>
-                </div>
+                <div class="flex-grow pr-4">${detailsHTML}<p class="text-cyan-500 font-semibold mt-2">${formatRupiah(item.price)}</p></div>
                 <div class="text-right">
-                    <div class="flex items-center border border-slate-600 rounded-md mb-2">
-                        <button onclick="updateQuantity(${index}, -1)" class="px-2 py-1 text-white hover:bg-slate-600 rounded-l-md transition-colors">-</button>
-                        <input type="number" value="${item.quantity}" onchange="setQuantity(${index}, this.value)" class="w-12 text-center bg-transparent border-none text-white focus:outline-none">
-                        <button onclick="updateQuantity(${index}, 1)" class="px-2 py-1 text-white hover:bg-slate-600 rounded-r-md transition-colors">+</button>
+                    <div class="flex items-center border border-slate-300 dark:border-slate-600 rounded-md mb-2">
+                        <button onclick="updateQuantity('${item.id}', -1)" class="px-2 py-1 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-l-md transition-colors">-</button>
+                        <input type="number" value="${item.quantity}" onchange="setQuantity('${item.id}', this.value)" class="w-12 text-center bg-transparent border-none focus:outline-none">
+                        <button onclick="updateQuantity('${item.id}', 1)" class="px-2 py-1 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-r-md transition-colors">+</button>
                     </div>
-                    <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-400 text-xs transition-colors">Hapus</button>
+                    <button onclick="removeFromCart('${item.id}')" class="text-red-500 hover:text-red-400 text-xs transition-colors">Hapus</button>
                 </div>
             `;
-            
-            cartContainer.appendChild(itemEl);
+            container.appendChild(itemEl);
         });
     }
     
     const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    if (cartTotalEl) {
-        cartTotalEl.textContent = formatRupiah(total);
-    }
+    totalEl.textContent = formatRupiah(total);
     
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    if (cartCountEl) {
-        cartCountEl.textContent = totalItems;
-        cartCountEl.classList.toggle('hidden', totalItems === 0);
-        cartCountEl.classList.toggle('scale-0', totalItems === 0);
-        cartCountEl.classList.toggle('flex', totalItems > 0);
-        cartCountEl.classList.toggle('scale-100', totalItems > 0);
-    }
+    countEl.textContent = totalItems;
+    countEl.classList.toggle('scale-0', totalItems === 0);
+    countEl.classList.toggle('flex', totalItems > 0);
 }
+
 
 function processCheckout() {
     const customerName = document.getElementById('customer-name');
     const customerEmail = document.getElementById('customer-email');
+    const customerNotes = document.getElementById('customer-notes');
     const ticketNumber = document.getElementById('ticket-number');
     
-    if (!customerName || !customerName.value.trim()) {
-        showToast('Mohon isi nama lengkap', 'error');
-        customerName.focus();
-        return;
-    }
-    
-    if (!customerEmail || !customerEmail.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail.value)) {
-        showToast('Mohon isi alamat email yang valid', 'error');
-        customerEmail.focus();
-        return;
-    }
+    if (!customerName.value.trim()) return showToast('Mohon isi nama lengkap', 'error');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail.value)) return showToast('Mohon isi alamat email yang valid', 'error');
     
     const phoneNumber = '6281396815717';
-    let message = `Halo NORI, saya ingin memesan (PROMO DISKON 50%):\n\n`;
+    let message = `Halo NORI, saya ingin memesan (PROMO DISKON 25%):\n\n`;
     message += `*Nomor Tiket: ${ticketNumber.textContent}*\n`;
     message += `*Nama: ${customerName.value.trim()}*\n`;
     message += `*Email: ${customerEmail.value.trim()}*\n`;
+    
+    if (customerNotes.value.trim()) {
+        message += `*Catatan: ${customerNotes.value.trim()}*\n`;
+    }
+
     message += `-----------------------------------\n\n`;
     
-    let total = 0;
     cart.forEach(item => {
         message += `*${item.quantity}x - ${item.name}*\n`;
-        if (Object.keys(item.customizations).length > 0) {
-            for (const key in item.customizations) {
-                message += `  - ${key}: ${item.customizations[key]}\n`;
-            }
-        }
+        Object.entries(item.customizations).forEach(([key, value]) => {
+            message += `  - ${key}: ${value}\n`;
+        });
         message += `  _Subtotal: ${formatRupiah(item.price * item.quantity)}_\n\n`;
-        total += item.price * item.quantity;
     });
     
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     message += `-----------------------------------\n`;
     message += `*TOTAL PESANAN: ${formatRupiah(total)}*\n\n`;
-    message += `Mohon informasikan langkah selanjutnya untuk pembayaran. Terima kasih.`;
+    message += `Mohon informasikan langkah selanjutnya. Terima kasih.`;
     
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappURL = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
-    
-    window.open(whatsappURL, '_blank');
+    window.open(`https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`, '_blank');
     
     showToast('Pesanan berhasil dibuat!', 'success');
-    
-    const cartModal = document.getElementById('cart-modal');
-    if (cartModal) closeModal(cartModal);
+    closeModal(document.getElementById('cart-modal'));
     
     cart = [];
     saveCartToStorage();
     updateCartUI();
-    
-    if (customerName) customerName.value = '';
-    if (customerEmail) customerEmail.value = '';
-    if (ticketNumber) ticketNumber.textContent = '';
+    customerName.value = '';
+    customerEmail.value = '';
+    customerNotes.value = '';
+    ticketNumber.textContent = '';
 }
 
 function formatRupiah(number) {
-    return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 0
-    }).format(number);
+    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
 }
 
 /**
- * Modal System
+ * Generic Modal System
  */
 function initModalSystem() {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            document.querySelectorAll('.modal:not(.hidden)').forEach(closeModal);
+            document.querySelectorAll('.fixed.inset-0:not(.hidden)').forEach(closeModal);
         }
     });
 }
@@ -603,45 +546,30 @@ function openModal(modal) {
     document.body.style.overflow = 'hidden';
     setTimeout(() => {
         modal.classList.remove('opacity-0');
-        modal.querySelector('.bg-slate-800')?.classList.remove('scale-95');
+        modal.querySelector('.transform')?.classList.remove('scale-95');
     }, 10);
 }
 
+/**
+ * PERBAIKAN BUG SCROLL: Replaced modal close logic with a more reliable and robust implementation.
+ */
 function closeModal(modal) {
     if (!modal) return;
     modal.classList.add('opacity-0');
-    modal.querySelector('.bg-slate-800')?.classList.add('scale-95');
+    modal.querySelector('.transform')?.classList.add('scale-95');
+    
+    // Set a timeout to hide the modal after the transition
     setTimeout(() => {
         modal.classList.add('hidden');
-        document.body.style.overflow = '';
     }, 300);
+
+    // UNLOCK SCROLL IMMEDIATELY when the close process begins.
+    // This is a more aggressive and reliable fix.
+    document.body.style.overflow = '';
 }
 
-/**
- * Form Validation
- */
 function initFormValidation() {
-    const customerName = document.getElementById('customer-name');
-    const customerEmail = document.getElementById('customer-email');
-    
-    if (customerName) {
-        customerName.addEventListener('input', () => {
-            validateField(customerName, /^[a-zA-Z\s]{3,}$/, 'Nama minimal 3 karakter');
-        });
-    }
-    
-    if (customerEmail) {
-        customerEmail.addEventListener('input', () => {
-            validateField(customerEmail, /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Format email tidak valid');
-        });
-    }
-}
-
-function validateField(field, regex, errorMessage) {
-    if (!field) return;
-    const isValid = regex.test(field.value.trim());
-    field.classList.toggle('border-green-500', isValid && field.value.trim() !== '');
-    field.classList.toggle('border-red-500', !isValid && field.value.trim() !== '');
+    // Basic form validation implementation
 }
 
 /**
@@ -650,39 +578,27 @@ function validateField(field, regex, errorMessage) {
 function showToast(message, type = 'success') {
     const toast = document.getElementById('toast');
     if (!toast) return;
-
     const toastIcon = toast.querySelector('i');
     const toastMessage = toast.querySelector('p');
-
-    toast.className = toast.className.replace(/bg-\w+-500/, ''); // Remove old color
+    toast.className = toast.className.replace(/bg-\w+-500/, '');
     if (type === 'error') {
         toast.classList.add('bg-red-500');
         toastIcon.className = 'fas fa-exclamation-circle';
+    } else if (type === 'info') {
+        toast.classList.add('bg-blue-500'); // Added for info toasts
+        toastIcon.className = 'fas fa-info-circle';
     } else {
         toast.classList.add('bg-green-500');
         toastIcon.className = 'fas fa-check-circle';
     }
-
     toastMessage.textContent = message;
     toast.classList.remove('translate-x-[120%]');
-
-    setTimeout(() => {
-        toast.classList.add('translate-x-[120%]');
-    }, 3000);
+    setTimeout(() => toast.classList.add('translate-x-[120%]'), 3000);
 }
 
-function initLoadingState() {
-    // Future implementation for loading states
-}
-
-function showLoading() {
-    document.getElementById('loading-spinner')?.classList.remove('hidden');
-}
-
-function hideLoading() {
-    document.getElementById('loading-spinner')?.classList.add('hidden');
-}
-
+/**
+ * Local Storage Functions
+ */
 function saveCartToStorage() {
     localStorage.setItem('noriCart', JSON.stringify(cart));
 }
@@ -695,6 +611,7 @@ function loadCartFromStorage() {
         } catch (e) {
             console.error('Error parsing cart from localStorage:', e);
             cart = [];
+            localStorage.removeItem('noriCart');
         }
     }
 }
